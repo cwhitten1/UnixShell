@@ -1,0 +1,21 @@
+Project Deadlines
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+3/22    -   Create shell process that can accept input and outputs the input to standard output. 
+		-	Understand how Lex and Yacc work together. Try to integrate into shell.
+
+3/29	-	Fully integrate Lex and Yacc
+		-	Write generic command files that just print "Command [command] executing with args [blah1, blah2, ...]"
+		-	Shell should properly interpret and execute all commands
+
+4/5		- 	I/O Redirection to files must be complete
+		- 	All built-in commands need to be completed
+		- 	Aliasing should be under development
+
+4/11	- 	Aliasing completed
+		- 	Wildcard matching completed
+		- 	Environment variable expansion completed
+		- 	Some test cases developed
+
+4/12	-	Test all code 
+		-	Fix any bugs
