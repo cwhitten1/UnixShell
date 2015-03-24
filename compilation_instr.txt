@@ -1,0 +1,18 @@
+How to compile:
+
+Make sure you have installed flex and bison in Cygwin
+
+
+Just Lex
+-----------
+In cygwin terminal,
+	flex [filename]
+	cc lex.yy.c -o run -lfl
+	./run.exe
+
+
+Both Lex and Yacc
+-------------------
+flex [filename]
+cc lex.yy.c y.tab.c -o run 
+./run.exe
