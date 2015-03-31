@@ -14,5 +14,6 @@ In cygwin terminal,
 Both Lex and Yacc
 -------------------
 flex [filename]
+yacc -d [yfilename]
 cc lex.yy.c y.tab.c -o run 
 ./run.exe

@@ -1,7 +1,8 @@
 %{
 #include <stdio.h>
 #include <string.h>
- 
+//int yydebug=1;
+
 void yyerror(const char *str)
 {
         fprintf(stderr,"error: %s\n",str);
@@ -26,7 +27,15 @@ main()
 
 %}
 
-%token NUMBER TOKHEAT STATE TOKTARGET TOKTEMPERATURE
+%token TOKHEAT STATE TOKTARGET TOKTEMPERATURE TOKCD TOKCD_HOME
+%union 
+{
+        int number;
+        char *string;
+}
+
+%token <number> NUMBER
+%token <string> WORD
 
 %%
 commands: /* empty */
@@ -37,10 +46,16 @@ command:
         heat_switch
         |
         target_set
+        |
+        change_dir
+        |
+        change_dir_home
+        |
+        default
         ;
 
 heat_switch:
-        TOKHEAT STATE
+        TOKHEAT
         {
                 printf("\tHeat turned on or off\n");
                 printShellSymbol();
@@ -50,8 +65,29 @@ heat_switch:
 target_set:
         TOKTARGET TOKTEMPERATURE NUMBER
         {
-                printf("\tTemperature set\n");
+                printf("\tTemperature set to %d\n", $3);
                 printShellSymbol();
         }
         ;
+
+change_dir:
+        TOKCD WORD
+        {
+                printf("\tChanged directory to %s\n", $2);
+                printShellSymbol();
+        }
+
+change_dir_home:
+        TOKCD_HOME
+        {
+                printf("\tChanged directory to home directory\n");
+                printShellSymbol();
+        }
+        ;
+default:
+        WORD
+        {
+                printf("\t %s \n", $1);
+                printShellSymbol();
+        }
 %%
