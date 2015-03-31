@@ -50,7 +50,7 @@ extern int yydebug;
     TOKTARGET = 260,
     TOKTEMPERATURE = 261,
     TOKCD = 262,
-    WSPACE = 263,
+    TOKCD_HOME = 263,
     NUMBER = 264,
     WORD = 265
   };
@@ -61,7 +61,7 @@ extern int yydebug;
 #define TOKTARGET 260
 #define TOKTEMPERATURE 261
 #define TOKCD 262
-#define WSPACE 263
+#define TOKCD_HOME 263
 #define NUMBER 264
 #define WORD 265
 

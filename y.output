@@ -1,0 +1,195 @@
+Terminals unused in grammar
+
+   STATE
+
+
+Grammar
+
+    0 $accept: commands $end
+
+    1 commands: %empty
+    2         | commands command
+
+    3 command: heat_switch
+    4        | target_set
+    5        | change_dir
+    6        | change_dir_prev
+    7        | default
+
+    8 heat_switch: TOKHEAT
+
+    9 target_set: TOKTARGET TOKTEMPERATURE NUMBER
+
+   10 change_dir: TOKCD WORD
+
+   11 change_dir_prev: TOKCD_HOME
+
+   12 default: WORD
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+TOKHEAT (258) 8
+STATE (259)
+TOKTARGET (260) 9
+TOKTEMPERATURE (261) 9
+TOKCD (262) 10
+TOKCD_HOME (263) 11
+NUMBER (264) 9
+WORD (265) 10 12
+
+
+Nonterminals, with rules where they appear
+
+$accept (11)
+    on left: 0
+commands (12)
+    on left: 1 2, on right: 0 2
+command (13)
+    on left: 3 4 5 6 7, on right: 2
+heat_switch (14)
+    on left: 8, on right: 3
+target_set (15)
+    on left: 9, on right: 4
+change_dir (16)
+    on left: 10, on right: 5
+change_dir_prev (17)
+    on left: 11, on right: 6
+default (18)
+    on left: 12, on right: 7
+
+
+State 0
+
+    0 $accept: . commands $end
+
+    $default  reduce using rule 1 (commands)
+
+    commands  go to state 1
+
+
+State 1
+
+    0 $accept: commands . $end
+    2 commands: commands . command
+
+    $end        shift, and go to state 2
+    TOKHEAT     shift, and go to state 3
+    TOKTARGET   shift, and go to state 4
+    TOKCD       shift, and go to state 5
+    TOKCD_HOME  shift, and go to state 6
+    WORD        shift, and go to state 7
+
+    command          go to state 8
+    heat_switch      go to state 9
+    target_set       go to state 10
+    change_dir       go to state 11
+    change_dir_prev  go to state 12
+    default          go to state 13
+
+
+State 2
+
+    0 $accept: commands $end .
+
+    $default  accept
+
+
+State 3
+
+    8 heat_switch: TOKHEAT .
+
+    $default  reduce using rule 8 (heat_switch)
+
+
+State 4
+
+    9 target_set: TOKTARGET . TOKTEMPERATURE NUMBER
+
+    TOKTEMPERATURE  shift, and go to state 14
+
+
+State 5
+
+   10 change_dir: TOKCD . WORD
+
+    WORD  shift, and go to state 15
+
+
+State 6
+
+   11 change_dir_prev: TOKCD_HOME .
+
+    $default  reduce using rule 11 (change_dir_prev)
+
+
+State 7
+
+   12 default: WORD .
+
+    $default  reduce using rule 12 (default)
+
+
+State 8
+
+    2 commands: commands command .
+
+    $default  reduce using rule 2 (commands)
+
+
+State 9
+
+    3 command: heat_switch .
+
+    $default  reduce using rule 3 (command)
+
+
+State 10
+
+    4 command: target_set .
+
+    $default  reduce using rule 4 (command)
+
+
+State 11
+
+    5 command: change_dir .
+
+    $default  reduce using rule 5 (command)
+
+
+State 12
+
+    6 command: change_dir_prev .
+
+    $default  reduce using rule 6 (command)
+
+
+State 13
+
+    7 command: default .
+
+    $default  reduce using rule 7 (command)
+
+
+State 14
+
+    9 target_set: TOKTARGET TOKTEMPERATURE . NUMBER
+
+    NUMBER  shift, and go to state 16
+
+
+State 15
+
+   10 change_dir: TOKCD WORD .
+
+    $default  reduce using rule 10 (change_dir)
+
+
+State 16
+
+    9 target_set: TOKTARGET TOKTEMPERATURE NUMBER .
+
+    $default  reduce using rule 9 (target_set)
