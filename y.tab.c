@@ -1275,7 +1275,7 @@ yyreduce:
   case 13:
 #line 78 "prac.y" /* yacc.c:1646  */
     {
-                printf("\t %s \n", (yyvsp[0].string));
+                printf("\tUnknown command: %s \n", (yyvsp[0].string));
                 printShellSymbol();
         }
 #line 1282 "y.tab.c" /* yacc.c:1646  */
