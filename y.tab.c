@@ -1240,7 +1240,7 @@ yyreduce:
 #line 48 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tHeat turned on or off\n");
-                printShellSymbol();
+                YYACCEPT;
         }
 #line 1246 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1249,7 +1249,7 @@ yyreduce:
 #line 56 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tTemperature set to %d\n", (yyvsp[0].number));
-                printShellSymbol();
+                YYACCEPT;
         }
 #line 1255 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1258,7 +1258,7 @@ yyreduce:
 #line 64 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tChanged directory to %s\n", (yyvsp[0].string));
-                printShellSymbol();
+                YYACCEPT;
         }
 #line 1264 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1267,7 +1267,7 @@ yyreduce:
 #line 71 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tChanged directory to home directory\n");
-                printShellSymbol();
+                YYACCEPT;
         }
 #line 1273 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1276,7 +1276,7 @@ yyreduce:
 #line 78 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tUnknown command: %s \n", (yyvsp[0].string));
-                printShellSymbol();
+                YYACCEPT;
         }
 #line 1282 "y.tab.c" /* yacc.c:1646  */
     break;

@@ -47,7 +47,7 @@ heat_switch:
         TOKHEAT
         {
                 printf("\tHeat turned on or off\n");
-                printShellSymbol();
+                YYACCEPT;
         }
         ;
 
@@ -55,7 +55,7 @@ target_set:
         TOKTARGET TOKTEMPERATURE NUMBER
         {
                 printf("\tTemperature set to %d\n", $3);
-                printShellSymbol();
+                YYACCEPT;
         }
         ;
 
@@ -63,20 +63,20 @@ change_dir:
         TOKCD WORD
         {
                 printf("\tChanged directory to %s\n", $2);
-                printShellSymbol();
+                YYACCEPT;
         }
 
 change_dir_home:
         TOKCD_HOME
         {
                 printf("\tChanged directory to home directory\n");
-                printShellSymbol();
+                YYACCEPT;
         }
         ;
 default:
         WORD
         {
                 printf("\tUnknown command: %s \n", $1);
-                printShellSymbol();
+                YYACCEPT;
         }
 %%
