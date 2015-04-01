@@ -77,21 +77,10 @@ int yywrap()
 {
         return 1;
 } 
-  
-void printShellSymbol()
-{
-        printf(":p > ");
-} 
-
-main()
-{
-        printShellSymbol();
-        yyparse();
-}
 
 
 
-#line 95 "y.tab.c" /* yacc.c:339  */
+#line 84 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -151,12 +140,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 32 "prac.y" /* yacc.c:355  */
+#line 21 "prac.y" /* yacc.c:355  */
 
         int number;
         char *string;
 
-#line 160 "y.tab.c" /* yacc.c:355  */
+#line 149 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -173,7 +162,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 177 "y.tab.c" /* yacc.c:358  */
+#line 166 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -471,8 +460,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    41,    41,    42,    46,    48,    50,    52,    54,    58,
-      66,    74,    81,    88
+       0,    30,    30,    31,    35,    37,    39,    41,    43,    47,
+      55,    63,    70,    77
 };
 #endif
 
@@ -484,7 +473,7 @@ static const char *const yytname[] =
   "$end", "error", "$undefined", "TOKHEAT", "STATE", "TOKTARGET",
   "TOKTEMPERATURE", "TOKCD", "TOKCD_HOME", "NUMBER", "WORD", "$accept",
   "commands", "command", "heat_switch", "target_set", "change_dir",
-  "change_dir_prev", "default", YY_NULLPTR
+  "change_dir_home", "default", YY_NULLPTR
 };
 #endif
 
@@ -1248,52 +1237,52 @@ yyreduce:
   switch (yyn)
     {
         case 9:
-#line 59 "prac.y" /* yacc.c:1646  */
+#line 48 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tHeat turned on or off\n");
                 printShellSymbol();
         }
-#line 1257 "y.tab.c" /* yacc.c:1646  */
+#line 1246 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 67 "prac.y" /* yacc.c:1646  */
+#line 56 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tTemperature set to %d\n", (yyvsp[0].number));
                 printShellSymbol();
         }
-#line 1266 "y.tab.c" /* yacc.c:1646  */
+#line 1255 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 75 "prac.y" /* yacc.c:1646  */
+#line 64 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tChanged directory to %s\n", (yyvsp[0].string));
                 printShellSymbol();
         }
-#line 1275 "y.tab.c" /* yacc.c:1646  */
+#line 1264 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 82 "prac.y" /* yacc.c:1646  */
+#line 71 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tChanged directory to home directory\n");
                 printShellSymbol();
         }
-#line 1284 "y.tab.c" /* yacc.c:1646  */
+#line 1273 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 89 "prac.y" /* yacc.c:1646  */
+#line 78 "prac.y" /* yacc.c:1646  */
     {
                 printf("\t %s \n", (yyvsp[0].string));
                 printShellSymbol();
         }
-#line 1293 "y.tab.c" /* yacc.c:1646  */
+#line 1282 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1297 "y.tab.c" /* yacc.c:1646  */
+#line 1286 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1521,4 +1510,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 93 "prac.y" /* yacc.c:1906  */
+#line 82 "prac.y" /* yacc.c:1906  */

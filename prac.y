@@ -12,17 +12,6 @@ int yywrap()
 {
         return 1;
 } 
-  
-void printShellSymbol()
-{
-        printf(":p > ");
-} 
-
-main()
-{
-        printShellSymbol();
-        yyparse();
-}
 
 
 %}
