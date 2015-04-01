@@ -86,6 +86,10 @@ default:
         WORD
         {
                 printf("\tUnknown command: %s \n", $1);
+        }
+        |
+        default WORD
+        {
                 YYACCEPT;
         }
 %%
