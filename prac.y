@@ -18,12 +18,6 @@ void printShellSymbol()
         printf(":p > ");
 } 
 
-main()
-{
-        printShellSymbol();
-        yyparse();
-}
-
 
 %}
 
@@ -87,7 +81,7 @@ change_dir_home:
 default:
         WORD
         {
-                printf("\t %s \n", $1);
+                printf("\tUnknown command: %s \n", $1);
                 printShellSymbol();
         }
 %%

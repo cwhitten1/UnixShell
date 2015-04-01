@@ -753,7 +753,7 @@ yylval.number=atoi(yytext); return NUMBER;
 case 2:
 YY_RULE_SETUP
 #line 9 "prac.l"
-yyless(yyleng-1);return TOKCD;   /*Return the last character to be scanned as input*/
+yyless(yyleng-1);return TOKCD;   /*yyless used to return the last character to be scanned as input*/
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
