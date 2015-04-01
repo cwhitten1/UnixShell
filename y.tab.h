@@ -45,32 +45,32 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    TOKHEAT = 258,
-    STATE = 259,
-    TOKTARGET = 260,
-    TOKTEMPERATURE = 261,
-    TOKCD = 262,
-    TOKCD_HOME = 263,
-    NUMBER = 264,
-    WORD = 265
+    STATE = 258,
+    TOKTARGET = 259,
+    TOKTEMPERATURE = 260,
+    TOKCD = 261,
+    TOKCD_HOME = 262,
+    NUMBER = 263,
+    WORD = 264,
+    TOKHEAT = 265
   };
 #endif
 /* Tokens.  */
-#define TOKHEAT 258
-#define STATE 259
-#define TOKTARGET 260
-#define TOKTEMPERATURE 261
-#define TOKCD 262
-#define TOKCD_HOME 263
-#define NUMBER 264
-#define WORD 265
+#define STATE 258
+#define TOKTARGET 259
+#define TOKTEMPERATURE 260
+#define TOKCD 261
+#define TOKCD_HOME 262
+#define NUMBER 263
+#define WORD 264
+#define TOKHEAT 265
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 21 "prac.y" /* yacc.c:1909  */
+#line 24 "prac.y" /* yacc.c:1909  */
 
         int number;
         char *string;

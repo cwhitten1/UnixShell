@@ -1,7 +1,10 @@
 %{
 #include <stdio.h>
 #include <string.h>
+#include "command.h"
 //int yydebug=1;
+
+int cmdtab_next = 0;
 
 void yyerror(const char *str)
 {
@@ -16,7 +19,7 @@ int yywrap()
 
 %}
 
-%token TOKHEAT STATE TOKTARGET TOKTEMPERATURE TOKCD TOKCD_HOME
+%token STATE TOKTARGET TOKTEMPERATURE TOKCD TOKCD_HOME
 %union 
 {
         int number;
@@ -25,6 +28,7 @@ int yywrap()
 
 %token <number> NUMBER
 %token <string> WORD
+%token <string> TOKHEAT
 
 %%
 commands: /* empty */
@@ -46,6 +50,11 @@ command:
 heat_switch:
         TOKHEAT
         {
+                struct command *cmd_slot = &commands[cmdtab_next];
+                cmd_slot->name = $1;
+                cmd_slot->argnum = 0;
+                cmd_slot->infile = "stdin";
+                cmd_slot->outfile = "stdout";
                 printf("\tHeat turned on or off\n");
                 YYACCEPT;
         }
