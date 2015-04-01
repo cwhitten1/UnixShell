@@ -12,11 +12,6 @@ int yywrap()
 {
         return 1;
 } 
-  
-void printShellSymbol()
-{
-        printf(":p > ");
-} 
 
 
 %}
@@ -81,7 +76,7 @@ change_dir_home:
 default:
         WORD
         {
-                printf("\tUnknown command: %s \n", $1);
+                printf("\t %s \n", $1);
                 printShellSymbol();
         }
 %%
