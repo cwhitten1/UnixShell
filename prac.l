@@ -11,11 +11,15 @@ cd 						return TOKCD_HOME;
 setenv 					return TOKSETENV;
 unsetenv				return TOKCLEARENV;
 printenv				return TOKPRINTENV;
+alias 					return TOKALIAS;
+unalias 				return TOKUNALIAS;
+
 heat					return TOKHEAT;
 on|off 					return STATE;
 target 					return TOKTARGET;
 temperature 			return TOKTEMPERATURE;
+
 [a-zA-Z]+       		yylval.string = strdup(yytext);return WORD;
-\n          		/* ignore end of line */;
+\n          			return TOKNEWLINE;
 [ \t]+      		/* ignore whitespace */;
 %%

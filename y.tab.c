@@ -126,9 +126,12 @@ extern int yydebug;
     TOKSETENV = 263,
     TOKCLEARENV = 264,
     TOKPRINTENV = 265,
-    NUMBER = 266,
-    WORD = 267,
-    TOKHEAT = 268
+    TOKALIAS = 266,
+    TOKUNALIAS = 267,
+    TOKNEWLINE = 268,
+    NUMBER = 269,
+    WORD = 270,
+    TOKHEAT = 271
   };
 #endif
 /* Tokens.  */
@@ -140,21 +143,24 @@ extern int yydebug;
 #define TOKSETENV 263
 #define TOKCLEARENV 264
 #define TOKPRINTENV 265
-#define NUMBER 266
-#define WORD 267
-#define TOKHEAT 268
+#define TOKALIAS 266
+#define TOKUNALIAS 267
+#define TOKNEWLINE 268
+#define NUMBER 269
+#define WORD 270
+#define TOKHEAT 271
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 26 "prac.y" /* yacc.c:355  */
+#line 28 "prac.y" /* yacc.c:355  */
 
         int number;
         char *string;
 
-#line 158 "y.tab.c" /* yacc.c:355  */
+#line 164 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -171,7 +177,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 175 "y.tab.c" /* yacc.c:358  */
+#line 181 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -413,21 +419,21 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   16
+#define YYLAST   22
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  14
+#define YYNTOKENS  17
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  11
+#define YYNNTS  14
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  20
+#define YYNRULES  27
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  27
+#define YYNSTATES  36
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   268
+#define YYMAXUTOK   271
 
 #define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -462,16 +468,17 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      15,    16
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    36,    36,    37,    41,    43,    45,    47,    49,    51,
-      53,    55,    59,    72,    84,    91,    99,   106,   113,   120,
-     125
+       0,    38,    38,    39,    43,    45,    47,    49,    51,    53,
+      55,    57,    59,    61,    63,    67,    80,    92,    99,   107,
+     115,   123,   131,   138,   145,   152,   157,   162
 };
 #endif
 
@@ -482,9 +489,10 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "STATE", "TOKTARGET", "TOKTEMPERATURE",
   "TOKCD", "TOKCD_HOME", "TOKSETENV", "TOKCLEARENV", "TOKPRINTENV",
-  "NUMBER", "WORD", "TOKHEAT", "$accept", "commands", "command",
-  "heat_switch", "target_set", "change_dir", "change_dir_home",
-  "set_env_var", "unset_env_var", "print_env_var", "default", YY_NULLPTR
+  "TOKALIAS", "TOKUNALIAS", "TOKNEWLINE", "NUMBER", "WORD", "TOKHEAT",
+  "$accept", "commands", "command", "heat_switch", "target_set",
+  "change_dir", "change_dir_home", "set_env_var", "unset_env_var",
+  "print_env_var", "show_aliases", "set_alias", "unset_alias", "default", YY_NULLPTR
 };
 #endif
 
@@ -494,14 +502,14 @@ static const char *const yytname[] =
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268
+     265,   266,   267,   268,   269,   270,   271
 };
 # endif
 
-#define YYPACT_NINF -11
+#define YYPACT_NINF -14
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-11)))
+  (!!((Yystate) == (-14)))
 
 #define YYTABLE_NINF -1
 
@@ -512,9 +520,10 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -11,     0,   -11,    -4,   -10,   -11,    -9,    -7,   -11,   -11,
-     -11,   -11,   -11,   -11,   -11,   -11,   -11,   -11,   -11,    -1,
-       3,   -11,     4,   -11,   -11,   -11,   -11
+     -14,     0,   -14,    -4,   -13,   -14,   -12,   -10,   -14,    -1,
+       2,   -14,   -14,   -14,   -14,   -14,   -14,   -14,   -14,   -14,
+     -14,   -14,   -14,   -14,   -14,     3,     5,   -14,     6,   -14,
+       7,   -14,   -14,   -14,   -14,   -14
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -522,23 +531,24 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,     0,     0,    15,     0,     0,    18,    19,
-      12,     3,     4,     5,     6,     7,     8,     9,    10,    11,
-       0,    14,     0,    17,    20,    13,    16
+       2,     0,     1,     0,     0,    18,     0,     0,    21,    22,
+       0,    27,    25,    15,     3,     4,     5,     6,     7,     8,
+       9,    10,    11,    12,    13,    14,     0,    17,     0,    20,
+       0,    24,    26,    16,    19,    23
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -11,   -11,   -11,   -11,   -11,   -11,   -11,   -11,   -11,   -11,
-     -11
+     -14,   -14,   -14,   -14,   -14,   -14,   -14,   -14,   -14,   -14,
+     -14,   -14,   -14,   -14
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,    11,    12,    13,    14,    15,    16,    17,    18,
-      19
+      -1,     1,    14,    15,    16,    17,    18,    19,    20,    21,
+      22,    23,    24,    25
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -546,39 +556,42 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       2,    20,    21,    22,     3,    23,     4,     5,     6,     7,
-       8,    24,     9,    10,    25,     0,    26
+       2,    26,    27,    28,     3,    29,     4,     5,     6,     7,
+       8,     9,    10,    11,    30,    12,    13,    31,    32,    33,
+       0,    34,    35
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     5,    12,    12,     4,    12,     6,     7,     8,     9,
-      10,    12,    12,    13,    11,    -1,    12
+       0,     5,    15,    15,     4,    15,     6,     7,     8,     9,
+      10,    11,    12,    13,    15,    15,    16,    15,    15,    14,
+      -1,    15,    15
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    15,     0,     4,     6,     7,     8,     9,    10,    12,
-      13,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-       5,    12,    12,    12,    12,    11,    12
+       0,    18,     0,     4,     6,     7,     8,     9,    10,    11,
+      12,    13,    15,    16,    19,    20,    21,    22,    23,    24,
+      25,    26,    27,    28,    29,    30,     5,    15,    15,    15,
+      15,    15,    15,    14,    15,    15
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    14,    15,    15,    16,    16,    16,    16,    16,    16,
-      16,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      24
+       0,    17,    18,    18,    19,    19,    19,    19,    19,    19,
+      19,    19,    19,    19,    19,    20,    21,    22,    23,    24,
+      25,    26,    27,    28,    29,    30,    30,    30
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     2,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     3,     2,     1,     3,     2,     1,     1,
-       2
+       1,     1,     1,     1,     1,     1,     3,     2,     1,     3,
+       2,     1,     1,     3,     2,     1,     2,     1
 };
 
 
@@ -1254,8 +1267,8 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 12:
-#line 60 "prac.y" /* yacc.c:1646  */
+        case 15:
+#line 68 "prac.y" /* yacc.c:1646  */
     {
                 struct command *cmd_slot = &commands[cmdtab_next];
                 cmd_slot->name = (yyvsp[0].string);
@@ -1265,81 +1278,115 @@ yyreduce:
                 printf("\tHeat turned on or off\n");
                 YYACCEPT;
         }
-#line 1269 "y.tab.c" /* yacc.c:1646  */
+#line 1282 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 13:
-#line 73 "prac.y" /* yacc.c:1646  */
+  case 16:
+#line 81 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tTemperature set to %d\n", (yyvsp[0].number));
                 YYACCEPT;
         }
-#line 1278 "y.tab.c" /* yacc.c:1646  */
+#line 1291 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 14:
-#line 85 "prac.y" /* yacc.c:1646  */
+  case 17:
+#line 93 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tChanged directory to %s\n", (yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1287 "y.tab.c" /* yacc.c:1646  */
+#line 1300 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 15:
-#line 92 "prac.y" /* yacc.c:1646  */
+  case 18:
+#line 100 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tChanged directory to home directory\n");
                 YYACCEPT;
         }
-#line 1296 "y.tab.c" /* yacc.c:1646  */
+#line 1309 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 16:
-#line 100 "prac.y" /* yacc.c:1646  */
+  case 19:
+#line 108 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tSet variable %s to %s\n", (yyvsp[-1].string), (yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1305 "y.tab.c" /* yacc.c:1646  */
+#line 1318 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 17:
-#line 107 "prac.y" /* yacc.c:1646  */
+  case 20:
+#line 116 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tCleared variable %s\n", (yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1314 "y.tab.c" /* yacc.c:1646  */
+#line 1327 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 18:
-#line 114 "prac.y" /* yacc.c:1646  */
+  case 21:
+#line 124 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tPrint function unavailable until env variables are coded.\n");
                 YYACCEPT;
         }
-#line 1323 "y.tab.c" /* yacc.c:1646  */
+#line 1336 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 19:
-#line 121 "prac.y" /* yacc.c:1646  */
+  case 22:
+#line 132 "prac.y" /* yacc.c:1646  */
+    {
+                printf("\tThis command will show all aliases\n");
+                YYACCEPT;  
+        }
+#line 1345 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 23:
+#line 139 "prac.y" /* yacc.c:1646  */
+    {
+                printf("\tSet alias %s to %s\n", (yyvsp[-1].string), (yyvsp[0].string));
+                YYACCEPT;
+        }
+#line 1354 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 24:
+#line 146 "prac.y" /* yacc.c:1646  */
+    {
+                printf("\tCleared alias %s", (yyvsp[0].string));
+                YYACCEPT;
+        }
+#line 1363 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 25:
+#line 153 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tUnknown command: %s \n", (yyvsp[0].string));
         }
-#line 1331 "y.tab.c" /* yacc.c:1646  */
+#line 1371 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 20:
-#line 126 "prac.y" /* yacc.c:1646  */
+  case 26:
+#line 158 "prac.y" /* yacc.c:1646  */
     {
                 YYACCEPT;
         }
-#line 1339 "y.tab.c" /* yacc.c:1646  */
+#line 1379 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 27:
+#line 163 "prac.y" /* yacc.c:1646  */
+    {
+        }
+#line 1386 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1343 "y.tab.c" /* yacc.c:1646  */
+#line 1390 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1567,4 +1614,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 129 "prac.y" /* yacc.c:1906  */
+#line 166 "prac.y" /* yacc.c:1906  */

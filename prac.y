@@ -22,6 +22,8 @@ int yywrap()
 %token STATE TOKTARGET TOKTEMPERATURE 
 %token TOKCD TOKCD_HOME 
 %token TOKSETENV TOKCLEARENV TOKPRINTENV
+%token TOKALIAS TOKUNALIAS
+%token TOKNEWLINE
 %union 
 {
         int number;
@@ -51,6 +53,12 @@ command:
         unset_env_var
         |
         print_env_var
+        |
+        show_aliases
+        |
+        set_alias
+        |
+        unset_alias
         |
         default
         ;
@@ -102,6 +110,7 @@ set_env_var:
                 YYACCEPT;
         }
         ;
+
 unset_env_var:
         TOKCLEARENV WORD
         {
@@ -109,10 +118,33 @@ unset_env_var:
                 YYACCEPT;
         }
         ;
+
 print_env_var:
         TOKPRINTENV
         {
                 printf("\tPrint function unavailable until env variables are coded.\n");
+                YYACCEPT;
+        }
+        ;
+
+show_aliases:
+        TOKALIAS
+        {
+                printf("\tThis command will show all aliases\n");
+                YYACCEPT;  
+        }
+        ;
+set_alias:
+        TOKALIAS WORD WORD
+        {
+                printf("\tSet alias %s to %s\n", $2, $3);
+                YYACCEPT;
+        }
+        ;
+unset_alias:
+        TOKUNALIAS WORD
+        {
+                printf("\tCleared alias %s\n", $2);
                 YYACCEPT;
         }
         ;
@@ -126,4 +158,9 @@ default:
         {
                 YYACCEPT;
         }
+        |
+        TOKNEWLINE
+        {
+        }
+        ;
 %%
