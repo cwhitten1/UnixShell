@@ -19,7 +19,9 @@ int yywrap()
 
 %}
 
-%token STATE TOKTARGET TOKTEMPERATURE TOKCD TOKCD_HOME
+%token STATE TOKTARGET TOKTEMPERATURE 
+%token TOKCD TOKCD_HOME 
+%token TOKSETENV TOKCLEARENV TOKPRINTENV
 %union 
 {
         int number;
@@ -43,6 +45,12 @@ command:
         change_dir
         |
         change_dir_home
+        |
+        set_env_var
+        |
+        unset_env_var
+        |
+        print_env_var
         |
         default
         ;
@@ -68,6 +76,10 @@ target_set:
         }
         ;
 
+
+
+
+
 change_dir:
         TOKCD WORD
         {
@@ -79,6 +91,28 @@ change_dir_home:
         TOKCD_HOME
         {
                 printf("\tChanged directory to home directory\n");
+                YYACCEPT;
+        }
+        ;
+
+set_env_var:
+        TOKSETENV WORD WORD
+        {
+                printf("\tSet variable %s to %s\n", $2, $3);
+                YYACCEPT;
+        }
+        ;
+unset_env_var:
+        TOKCLEARENV WORD
+        {
+                printf("\tCleared variable %s\n", $2);
+                YYACCEPT;
+        }
+        ;
+print_env_var:
+        TOKPRINTENV
+        {
+                printf("\tPrint function unavailable until env variables are coded.\n");
                 YYACCEPT;
         }
         ;

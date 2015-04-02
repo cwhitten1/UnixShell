@@ -10,6 +10,7 @@ void printShellSymbol()
 } 
 
 void shell_init(){ 
+	
 }
 
 int main()
