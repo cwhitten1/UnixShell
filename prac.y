@@ -60,6 +60,8 @@ command:
         |
         unset_alias
         |
+        newline
+        |
         default
         ;
 
@@ -134,6 +136,8 @@ show_aliases:
                 YYACCEPT;  
         }
         ;
+
+//This rule causes a shift/reduce conflict but I don't know why
 set_alias:
         TOKALIAS WORD WORD
         {
@@ -141,6 +145,7 @@ set_alias:
                 YYACCEPT;
         }
         ;
+
 unset_alias:
         TOKUNALIAS WORD
         {
@@ -148,19 +153,24 @@ unset_alias:
                 YYACCEPT;
         }
         ;
+
+newline:
+        TOKNEWLINE
+        {
+        }
+        ;
+
+//This rule causes a shift/reduce conflict but I don't know why
 default:
         WORD
         {
                 printf("\tUnknown command: %s \n", $1);
+                YYACCEPT;
         }
         |
         default WORD
         {
                 YYACCEPT;
-        }
-        |
-        TOKNEWLINE
-        {
         }
         ;
 %%
