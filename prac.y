@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "command.h"
+#include "envar.h"
+
 //int yydebug=1;
 
 int cmdtab_next = 0;
@@ -24,6 +26,8 @@ int yywrap()
 %token TOKSETENV TOKCLEARENV TOKPRINTENV
 %token TOKALIAS TOKUNALIAS
 %token TOKNEWLINE
+%token TOKBYE
+
 %union 
 {
         int number;
@@ -59,6 +63,8 @@ command:
         set_alias
         |
         unset_alias
+        |
+        bye
         |
         newline
         |
@@ -153,6 +159,14 @@ unset_alias:
                 YYACCEPT;
         }
         ;
+
+bye:
+        TOKBYE
+        {
+                printf("\tBye!");
+                exitRequested = 1;
+                YYACCEPT;
+        }
 
 newline:
         TOKNEWLINE

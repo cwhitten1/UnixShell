@@ -56,9 +56,10 @@ extern int yydebug;
     TOKALIAS = 266,
     TOKUNALIAS = 267,
     TOKNEWLINE = 268,
-    NUMBER = 269,
-    WORD = 270,
-    TOKHEAT = 271
+    TOKBYE = 269,
+    NUMBER = 270,
+    WORD = 271,
+    TOKHEAT = 272
   };
 #endif
 /* Tokens.  */
@@ -73,21 +74,22 @@ extern int yydebug;
 #define TOKALIAS 266
 #define TOKUNALIAS 267
 #define TOKNEWLINE 268
-#define NUMBER 269
-#define WORD 270
-#define TOKHEAT 271
+#define TOKBYE 269
+#define NUMBER 270
+#define WORD 271
+#define TOKHEAT 272
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 28 "prac.y" /* yacc.c:1909  */
+#line 32 "prac.y" /* yacc.c:1909  */
 
         int number;
         char *string;
 
-#line 91 "y.tab.h" /* yacc.c:1909  */
+#line 93 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

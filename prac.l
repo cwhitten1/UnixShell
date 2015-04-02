@@ -13,6 +13,7 @@ unsetenv				return TOKCLEARENV;
 printenv				return TOKPRINTENV;
 alias 					return TOKALIAS;
 unalias 				return TOKUNALIAS;
+bye 					return TOKBYE;
 
 heat					return TOKHEAT;
 on|off 					return STATE;
