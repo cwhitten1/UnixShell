@@ -2,4 +2,7 @@
  * This header file declares environment variables for the shell
  */
 
- extern int exitRequested;
+int exitRequested;	/* Used by the shell loop to test for exit condition */
+char* PATH;			/* The starting path variable*/
+char* HOME;			/* The home path */
+char* PWD; 			/* The current working directory */
