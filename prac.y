@@ -7,6 +7,7 @@
 //int yydebug=1;
 
 int cmdtab_next = 0;
+char* invalid_cmd;
 
 void yyerror(const char *str)
 {
@@ -176,15 +177,18 @@ newline:
 
 //This rule causes a shift/reduce conflict but I don't know why
 default:
-        WORD
+        default TOKNEWLINE
         {
-                printf("\tUnknown command: %s \n", $1);
+                printf("\tCommand %s not recognized\n", invalid_cmd);
+                invalid_cmd = NULL;
                 YYACCEPT;
         }
         |
-        default WORD
+        WORD
         {
-                YYACCEPT;
+                if(invalid_cmd == NULL)
+                        invalid_cmd = $1;
         }
         ;
+       
 %%
