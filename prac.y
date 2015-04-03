@@ -3,6 +3,7 @@
 #include <string.h>
 #include "command.h"
 #include "envar.h"
+#include "cmdcode.h"
 
 //int yydebug=1;
 
@@ -131,7 +132,7 @@ unset_env_var:
 print_env_var:
         TOKPRINTENV
         {
-                printf("\tPrint function unavailable until env variables are coded.\n");
+                printenv();
                 YYACCEPT;
         }
         ;

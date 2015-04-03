@@ -68,6 +68,7 @@
 #include <string.h>
 #include "command.h"
 #include "envar.h"
+#include "cmdcode.h"
 
 //int yydebug=1;
 
@@ -86,7 +87,7 @@ int yywrap()
 
 
 
-#line 90 "y.tab.c" /* yacc.c:339  */
+#line 91 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -160,12 +161,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 33 "prac.y" /* yacc.c:355  */
+#line 34 "prac.y" /* yacc.c:355  */
 
         int number;
         char *string;
 
-#line 169 "y.tab.c" /* yacc.c:355  */
+#line 170 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -182,7 +183,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 186 "y.tab.c" /* yacc.c:358  */
+#line 187 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -481,10 +482,10 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    43,    43,    44,    48,    50,    52,    54,    56,    58,
-      60,    62,    64,    66,    68,    70,    72,    76,    89,   101,
-     108,   116,   124,   132,   140,   149,   157,   165,   173,   180,
-     187
+       0,    44,    44,    45,    49,    51,    53,    55,    57,    59,
+      61,    63,    65,    67,    69,    71,    73,    77,    90,   102,
+     109,   117,   125,   133,   141,   150,   158,   166,   174,   181,
+     188
 };
 #endif
 
@@ -1277,7 +1278,7 @@ yyreduce:
   switch (yyn)
     {
         case 17:
-#line 77 "prac.y" /* yacc.c:1646  */
+#line 78 "prac.y" /* yacc.c:1646  */
     {
                 struct command *cmd_slot = &commands[cmdtab_next];
                 cmd_slot->name = (yyvsp[0].string);
@@ -1287,128 +1288,128 @@ yyreduce:
                 printf("\tHeat turned on or off\n");
                 YYACCEPT;
         }
-#line 1291 "y.tab.c" /* yacc.c:1646  */
+#line 1292 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 90 "prac.y" /* yacc.c:1646  */
+#line 91 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tTemperature set to %d\n", (yyvsp[0].number));
                 YYACCEPT;
         }
-#line 1300 "y.tab.c" /* yacc.c:1646  */
+#line 1301 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 102 "prac.y" /* yacc.c:1646  */
+#line 103 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tChanged directory to %s\n", (yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1309 "y.tab.c" /* yacc.c:1646  */
+#line 1310 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 109 "prac.y" /* yacc.c:1646  */
+#line 110 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tChanged directory to home directory\n");
                 YYACCEPT;
         }
-#line 1318 "y.tab.c" /* yacc.c:1646  */
+#line 1319 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 117 "prac.y" /* yacc.c:1646  */
+#line 118 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tSet variable %s to %s\n", (yyvsp[-1].string), (yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1327 "y.tab.c" /* yacc.c:1646  */
+#line 1328 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 125 "prac.y" /* yacc.c:1646  */
+#line 126 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tCleared variable %s\n", (yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1336 "y.tab.c" /* yacc.c:1646  */
+#line 1337 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 133 "prac.y" /* yacc.c:1646  */
+#line 134 "prac.y" /* yacc.c:1646  */
     {
-                printf("\tPrint function unavailable until env variables are coded.\n");
+                printenv();
                 YYACCEPT;
         }
-#line 1345 "y.tab.c" /* yacc.c:1646  */
+#line 1346 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 141 "prac.y" /* yacc.c:1646  */
+#line 142 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tThis command will show all aliases\n");
                 YYACCEPT;  
         }
-#line 1354 "y.tab.c" /* yacc.c:1646  */
+#line 1355 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 150 "prac.y" /* yacc.c:1646  */
+#line 151 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tSet alias %s to %s\n", (yyvsp[-1].string), (yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1363 "y.tab.c" /* yacc.c:1646  */
+#line 1364 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 158 "prac.y" /* yacc.c:1646  */
+#line 159 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tCleared alias %s\n", (yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1372 "y.tab.c" /* yacc.c:1646  */
+#line 1373 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 166 "prac.y" /* yacc.c:1646  */
+#line 167 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tBye!");
                 exitRequested = 1;
                 YYACCEPT;
         }
-#line 1382 "y.tab.c" /* yacc.c:1646  */
+#line 1383 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 174 "prac.y" /* yacc.c:1646  */
+#line 175 "prac.y" /* yacc.c:1646  */
     {
         }
-#line 1389 "y.tab.c" /* yacc.c:1646  */
+#line 1390 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 181 "prac.y" /* yacc.c:1646  */
+#line 182 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tCommand %s not recognized\n", invalid_cmd);
                 invalid_cmd = NULL;
                 YYACCEPT;
         }
-#line 1399 "y.tab.c" /* yacc.c:1646  */
+#line 1400 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 188 "prac.y" /* yacc.c:1646  */
+#line 189 "prac.y" /* yacc.c:1646  */
     {
                 if(invalid_cmd == NULL)
                         invalid_cmd = (yyvsp[0].string);
         }
-#line 1408 "y.tab.c" /* yacc.c:1646  */
+#line 1409 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1412 "y.tab.c" /* yacc.c:1646  */
+#line 1413 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1636,4 +1637,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 194 "prac.y" /* yacc.c:1906  */
+#line 195 "prac.y" /* yacc.c:1906  */
