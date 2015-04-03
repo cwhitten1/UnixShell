@@ -1,0 +1,10 @@
+Environment Variables Explained
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This is how I think env variables work:
+
+- When shell process is started, the parent OS environment variables are copied into the process.
+- When your shell calls getenv() or setenv(), it is modifying the process copy NOT the parent copy.
+- Shells can maintain a local copy of the environment variables as well which will be instantiated in shell_init()
+- These local copies must be updated whenver the process copies are also updated.  
+- Updating the local copies without updating the process copy may cause problems for forked processes.
+- I have no clue what a forked process is
