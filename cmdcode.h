@@ -6,3 +6,4 @@
 void print_env();
 void change_dir();
 void set_env();
+void unset_env();
