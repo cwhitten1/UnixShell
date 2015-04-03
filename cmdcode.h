@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "envar.h"
 
-void printenv();
+void print_env();
+void change_dir();
+void set_env();

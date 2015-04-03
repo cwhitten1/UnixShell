@@ -1,6 +1,8 @@
 %{
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "command.h"
 #include "envar.h"
 #include "cmdcode.h"
@@ -101,7 +103,7 @@ target_set:
 change_dir:
         TOKCD WORD
         {
-                printf("\tChanged directory to %s\n", $2);
+                change_dir($2);
                 YYACCEPT;
         }
 
@@ -132,7 +134,7 @@ unset_env_var:
 print_env_var:
         TOKPRINTENV
         {
-                printenv();
+                print_env();
                 YYACCEPT;
         }
         ;

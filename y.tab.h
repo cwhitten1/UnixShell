@@ -84,7 +84,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 34 "prac.y" /* yacc.c:1909  */
+#line 36 "prac.y" /* yacc.c:1909  */
 
         int number;
         char *string;
