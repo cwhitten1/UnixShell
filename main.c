@@ -17,10 +17,6 @@ void shell_init(){
 	PATH = getenv("PATH");
 	HOME = getenv("HOME");
 	PWD = getenv("PWD");
-	printf("PATH: %s\n", PATH);
-	printf("HOME: %s\n", HOME);
-	printf("PWD: %s\n", PWD);
-	printf("\n\n\n\n");
 
 }
 
