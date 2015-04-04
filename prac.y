@@ -118,7 +118,14 @@ change_dir_home:
 set_env_var:
         TOKSETENV WORD WORD
         {
-                printf("\tSet variable %s to %s\n", $2, $3);
+                char* env_var = getEnvironmentVariable($2);
+                if(env_var == NULL)
+                        printf("\tVariable %s not found", $2);
+                else
+                {
+                         printf("\tSet variable %s to %s\n", env_var, $3);
+                         set_env(env_var, $3);   
+                }
                 YYACCEPT;
         }
         ;
@@ -126,7 +133,14 @@ set_env_var:
 unset_env_var:
         TOKCLEARENV WORD
         {
-                printf("\tCleared variable %s\n", $2);
+                char* env_var = getEnvironmentVariable($2);
+                if(env_var == NULL)
+                        printf("\tVariable %s not found", $2);
+                else
+                {
+                         printf("\tCleared variable %s\n", env_var);
+                         unset_env(env_var);   
+                }
                 YYACCEPT;
         }
         ;

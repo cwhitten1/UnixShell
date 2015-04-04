@@ -10,11 +10,13 @@ void print_env(){
 //The first arg should be an environment variable defined in envar.h
 void set_env(char* env_var, char* val){
 	strcpy(env_var, val);
+    //I think we may need to make a system call to setenv() as well
 }
 
 //The first arg should be an environment variable defined in envar.h
 void unset_env(char* env_var){
 	env_var = NULL;
+     //I think we may need to make a system call to setenv() as well
 }
 
 void change_dir(char* word){
