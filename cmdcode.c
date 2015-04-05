@@ -1,4 +1,8 @@
 #include "cmdcode.h"
+#include "alias.h"
+
+struct alias alias_table[MAX_SIZE];
+int alias_count = 0;
 
 void print_env(){
 	printf("PATH: %s\n", PATH);
@@ -32,3 +36,28 @@ void change_dir(char* word){
     free(cwd);       
 }
 
+void set_alias(char* name, char* word){
+    alias_table[alias_count].ali = name;
+    alias_table[alias_count].cmd = word;
+    alias_count++;
+
+    printf("\tAlias %s set as %s\n", name, word);
+}
+
+void show_aliases(){
+    int i = 0;
+
+    while(i != alias_count)
+    {
+        char* name = alias_table[i].ali;
+        char* word = alias_table[i].cmd;
+
+        ++i;
+
+        printf("\tAlias: %s \tCommand: %s\n", name, word);
+    }
+}
+
+/*void unset_alias(char* name){
+
+}*/

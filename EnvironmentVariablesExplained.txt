@@ -8,3 +8,14 @@ This is how I think env variables work:
 - These local copies must be updated whenver the process copies are also updated.  
 - Updating the local copies without updating the process copy may cause problems for forked processes.
 - I have no clue what a forked process is
+
+
+
+- A forked process is one that is identical to the process that called fork()
+	i.e. process 1 calls fork(), it creates a child process that it identical to the parent (the caller process)
+- syscall fork() returns either negative value, zero, or posititve value
+	- negative value is returned if child process could not be created
+	- zero is returned to the child process
+	- positive value (also the pid of the child process) returned to the parent process
+- after creation of the child process, both processes work independently of each other
+	- however, they BOTH execute the next line of code

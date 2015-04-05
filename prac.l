@@ -6,19 +6,15 @@
 
 %%
 [0-9]+    				yylval.number=atoi(yytext); return NUMBER;
-cd[ \t\r]+[a-zA-Z]		yyless(yyleng-1);return TOKCD;   /*Return the last character to be scanned as input*/
-cd 						return TOKCD_HOME;
-setenv 					return TOKSETENV;
-unsetenv				return TOKCLEARENV;
-printenv				return TOKPRINTENV;
-alias 					return TOKALIAS;
-unalias 				return TOKUNALIAS;
-bye 					return TOKBYE;
+cd[ \t\r]+[a-zA-Z]		yylval.string = strdup(yytext);yyless(yyleng-1);return TOKCD;   /*Return the last character to be scanned as input*/
+cd 						yylval.string = strdup(yytext);return TOKCD_HOME;
+setenv 					yylval.string = strdup(yytext);return TOKSETENV;
+unsetenv				yylval.string = strdup(yytext);return TOKCLEARENV;
+printenv				yylval.string = strdup(yytext);return TOKPRINTENV;
+alias 					yylval.string = strdup(yytext);return TOKALIAS;
+unalias 				yylval.string = strdup(yytext);return TOKUNALIAS;
+bye 					yylval.string = strdup(yytext);return TOKBYE;
 
-heat					return TOKHEAT;
-on|off 					return STATE;
-target 					return TOKTARGET;
-temperature 			return TOKTEMPERATURE;
 
 [a-zA-Z]+       		yylval.string = strdup(yytext);return WORD;
 \n          			return TOKNEWLINE;
