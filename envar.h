@@ -7,4 +7,4 @@ char* PATH;			/* The starting path variable*/
 char* HOME;			/* The home path */
 char* PWD; 			/* The current working directory */
 
- char* getEnvironmentVariable(char* var_name);
+ char* getLocalEnvironmentVariable(char* var_name);

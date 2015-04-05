@@ -2,7 +2,7 @@
 #include "envar.h"
 
 
-char* getEnvironmentVariable(char* var_name){
+char* getLocalEnvironmentVariable(char* var_name){
 	if(strcmp(var_name, "PATH") == 0)
 		return PATH;
 	else if(strcmp(var_name, "HOME") == 0)

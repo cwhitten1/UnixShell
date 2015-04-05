@@ -1,22 +1,34 @@
 #include "cmdcode.h"
 
 void print_env(){
-	printf("PATH: %s\n", PATH);
-	printf("HOME: %s\n", HOME);
-	printf("PWD: %s\n", PWD);
+	int i=0;
+
+    while(environ[i]){
+      printf("%s\n\n", environ[i++]);
+    }
+
 	printf("\n\n\n\n");
 }
 
-//The first arg should be an environment variable defined in envar.h
 void set_env(char* env_var, char* val){
-	strcpy(env_var, val);
-    //I think we may need to make a system call to setenv() as well
+
+    //Copy new value to local variable (if one exists i.e. PATH)
+    char* env_var_local = getLocalEnvironmentVariable(env_var);
+    if(env_var_local != NULL)
+	   strcpy(env_var_local, val);
+
+    //Modify process environment variable
+    int success = setenv(env_var, val, 1); //Returns 0 on success, -1 otherwise
 }
 
-//The first arg should be an environment variable defined in envar.h
 void unset_env(char* env_var){
-	env_var = NULL;
-     //I think we may need to make a system call to setenv() as well
+    //Remove local copy
+	char* env_var_local = getLocalEnvironmentVariable(env_var);
+    if(env_var_local != NULL)
+       env_var_local = NULL;
+
+    //Modify process environment variable
+    int success = unsetenv(env_var); //Returns 0 on success, -1 otherwise
 }
 
 void change_dir(char* word){
