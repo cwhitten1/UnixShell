@@ -20,7 +20,7 @@ void yyerror(const char *str)
 int yywrap()
 {
         return 1;
-} 
+}
 
 
 %}
