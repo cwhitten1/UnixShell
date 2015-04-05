@@ -38,7 +38,7 @@ void change_dir(char* word){
     if(success == 0)
     {
     	printf("\tChanged directory to %s\n", cwd);
-    	set_env(PWD, cwd);
+    	set_env("PWD", cwd);
     }
     else
     	printf("\tDirectory \"%s\" not found\n", word);
