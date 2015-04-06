@@ -45,51 +45,45 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    STATE = 258,
-    TOKTARGET = 259,
-    TOKTEMPERATURE = 260,
-    TOKCD = 261,
-    TOKCD_HOME = 262,
-    TOKSETENV = 263,
-    TOKCLEARENV = 264,
-    TOKPRINTENV = 265,
-    TOKALIAS = 266,
-    TOKUNALIAS = 267,
-    TOKNEWLINE = 268,
-    TOKBYE = 269,
-    NUMBER = 270,
-    WORD = 271,
-    TOKHEAT = 272
+    TOKCD = 258,
+    TOKCD_HOME = 259,
+    TOKSETENV = 260,
+    TOKCLEARENV = 261,
+    TOKPRINTENV = 262,
+    TOKALIAS = 263,
+    TOKUNALIAS = 264,
+    TOKNEWLINE = 265,
+    TOKBYE = 266,
+    NUMBER = 267,
+    WORD = 268,
+    TOKHEAT = 269
   };
 #endif
 /* Tokens.  */
-#define STATE 258
-#define TOKTARGET 259
-#define TOKTEMPERATURE 260
-#define TOKCD 261
-#define TOKCD_HOME 262
-#define TOKSETENV 263
-#define TOKCLEARENV 264
-#define TOKPRINTENV 265
-#define TOKALIAS 266
-#define TOKUNALIAS 267
-#define TOKNEWLINE 268
-#define TOKBYE 269
-#define NUMBER 270
-#define WORD 271
-#define TOKHEAT 272
+#define TOKCD 258
+#define TOKCD_HOME 259
+#define TOKSETENV 260
+#define TOKCLEARENV 261
+#define TOKPRINTENV 262
+#define TOKALIAS 263
+#define TOKUNALIAS 264
+#define TOKNEWLINE 265
+#define TOKBYE 266
+#define NUMBER 267
+#define WORD 268
+#define TOKHEAT 269
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 36 "prac.y" /* yacc.c:1909  */
+#line 35 "prac.y" /* yacc.c:1909  */
 
         int number;
         char *string;
 
-#line 93 "y.tab.h" /* yacc.c:1909  */
+#line 87 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

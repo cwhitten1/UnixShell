@@ -15,7 +15,7 @@ alias 					return TOKALIAS;
 unalias 				return TOKUNALIAS;
 bye 					return TOKBYE;
 
-[a-zA-Z]+       		yylval.string = strdup(yytext);return WORD;
+[^<>|\& \t\n]+      		yylval.string = strdup(yytext);return WORD;
 \n          			return TOKNEWLINE;
 [ \t]+      		/* ignore whitespace */;
 %%
