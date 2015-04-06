@@ -15,11 +15,6 @@ alias 					return TOKALIAS;
 unalias 				return TOKUNALIAS;
 bye 					return TOKBYE;
 
-heat					return TOKHEAT;
-on|off 					return STATE;
-target 					return TOKTARGET;
-temperature 			return TOKTEMPERATURE;
-
 [a-zA-Z]+       		yylval.string = strdup(yytext);return WORD;
 \n          			return TOKNEWLINE;
 [ \t]+      		/* ignore whitespace */;

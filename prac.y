@@ -25,7 +25,6 @@ int yywrap()
 
 %}
 
-%token STATE TOKTARGET TOKTEMPERATURE 
 %token TOKCD TOKCD_HOME 
 %token TOKSETENV TOKCLEARENV TOKPRINTENV
 %token TOKALIAS TOKUNALIAS
@@ -48,10 +47,6 @@ commands: /* empty */
         ;
 
 command:
-        heat_switch
-        |
-        target_set
-        |
         change_dir
         |
         change_dir_home
@@ -74,31 +69,6 @@ command:
         |
         default
         ;
-
-heat_switch:
-        TOKHEAT
-        {
-                struct command *cmd_slot = &commands[cmdtab_next];
-                cmd_slot->name = $1;
-                cmd_slot->argnum = 0;
-                cmd_slot->infile = "stdin";
-                cmd_slot->outfile = "stdout";
-                printf("\tHeat turned on or off\n");
-                YYACCEPT;
-        }
-        ;
-
-target_set:
-        TOKTARGET TOKTEMPERATURE NUMBER
-        {
-                printf("\tTemperature set to %d\n", $3);
-                YYACCEPT;
-        }
-        ;
-
-
-
-
 
 change_dir:
         TOKCD WORD
