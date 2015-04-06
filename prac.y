@@ -28,7 +28,7 @@ int yywrap()
 %token TOKCD TOKCD_HOME 
 %token TOKSETENV TOKCLEARENV TOKPRINTENV
 %token TOKALIAS TOKUNALIAS
-%token TOKNEWLINE
+%token TOKNEWLINE TOKQUOTE
 %token TOKBYE
 
 %union 
@@ -67,6 +67,8 @@ command:
         |
         newline
         |
+        quote
+        |
         default
         ;
 
@@ -78,7 +80,7 @@ change_dir:
         }
 
 change_dir_home:
-        TOKCD_HOME
+        TOKCD TOKNEWLINE
         {
                 change_dir(HOME);
                 YYACCEPT;
@@ -158,6 +160,11 @@ bye:
 
 newline:
         TOKNEWLINE
+        {
+        }
+        ;
+quote:
+        TOKQUOTE
         {
         }
         ;
