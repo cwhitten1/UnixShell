@@ -46,46 +46,44 @@ extern int yydebug;
   enum yytokentype
   {
     TOKCD = 258,
-    TOKCD_HOME = 259,
-    TOKSETENV = 260,
-    TOKCLEARENV = 261,
-    TOKPRINTENV = 262,
-    TOKALIAS = 263,
-    TOKUNALIAS = 264,
-    TOKNEWLINE = 265,
-    TOKQUOTE = 266,
-    TOKBYE = 267,
-    NUMBER = 268,
-    WORD = 269,
-    TOKHEAT = 270
+    TOKSETENV = 259,
+    TOKCLEARENV = 260,
+    TOKPRINTENV = 261,
+    TOKALIAS = 262,
+    TOKUNALIAS = 263,
+    TOKNEWLINE = 264,
+    TOKQUOTE = 265,
+    TOKBYE = 266,
+    NUMBER = 267,
+    WORD = 268,
+    TOKHEAT = 269
   };
 #endif
 /* Tokens.  */
 #define TOKCD 258
-#define TOKCD_HOME 259
-#define TOKSETENV 260
-#define TOKCLEARENV 261
-#define TOKPRINTENV 262
-#define TOKALIAS 263
-#define TOKUNALIAS 264
-#define TOKNEWLINE 265
-#define TOKQUOTE 266
-#define TOKBYE 267
-#define NUMBER 268
-#define WORD 269
-#define TOKHEAT 270
+#define TOKSETENV 259
+#define TOKCLEARENV 260
+#define TOKPRINTENV 261
+#define TOKALIAS 262
+#define TOKUNALIAS 263
+#define TOKNEWLINE 264
+#define TOKQUOTE 265
+#define TOKBYE 266
+#define NUMBER 267
+#define WORD 268
+#define TOKHEAT 269
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 35 "prac.y" /* yacc.c:1909  */
+#line 37 "prac.y" /* yacc.c:1909  */
 
         int number;
         char *string;
 
-#line 89 "y.tab.h" /* yacc.c:1909  */
+#line 87 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

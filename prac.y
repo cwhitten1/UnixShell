@@ -32,7 +32,6 @@ int yywrap()
 %token <string> TOKALIAS TOKUNALIAS
 %token <string> TOKNEWLINE TOKQUOTE
 %token <string> TOKBYE 
->>>>>>> origin/elli
 
 %union 
 {
@@ -144,7 +143,7 @@ set_alias:
                 YYACCEPT;
         }
         |
-        TOKALIAS WORD TOKCD_HOME
+        TOKALIAS WORD TOKCD
         {
                 set_alias($2, $3);
                 YYACCEPT;
@@ -212,7 +211,7 @@ quote:
 default:
         default TOKNEWLINE
         {
-                printf("\tCommand %s not recognized\n", invalid_cmd);
+                printf("\tCommand \"%s\" not recognized\n", invalid_cmd);
                 invalid_cmd = NULL;
                 YYACCEPT;
         }
