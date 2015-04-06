@@ -110,7 +110,7 @@ change_dir:
 change_dir_home:
         TOKCD_HOME
         {
-                printf("\tChanged directory to home directory\n");
+                change_dir(HOME);
                 YYACCEPT;
         }
         ;

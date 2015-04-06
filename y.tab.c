@@ -486,8 +486,8 @@ static const yytype_uint8 yyrline[] =
 {
        0,    46,    46,    47,    51,    53,    55,    57,    59,    61,
       63,    65,    67,    69,    71,    73,    75,    79,    92,   104,
-     111,   119,   127,   135,   143,   152,   160,   168,   176,   183,
-     190
+     111,   119,   134,   149,   157,   166,   174,   182,   190,   197,
+     204
 };
 #endif
 
@@ -1314,7 +1314,7 @@ yyreduce:
   case 20:
 #line 112 "prac.y" /* yacc.c:1646  */
     {
-                printf("\tChanged directory to home directory\n");
+                change_dir(HOME);
                 YYACCEPT;
         }
 #line 1321 "y.tab.c" /* yacc.c:1646  */
@@ -1323,95 +1323,109 @@ yyreduce:
   case 21:
 #line 120 "prac.y" /* yacc.c:1646  */
     {
-                printf("\tSet variable %s to %s\n", (yyvsp[-1].string), (yyvsp[0].string));
+                char* env_var = (yyvsp[-1].string);
+                if(env_var == NULL)
+                        printf("\tVariable %s not found", (yyvsp[-1].string));
+                else
+                {
+                         printf("\tSet variable %s to %s\n", env_var, (yyvsp[0].string));
+                         set_env(env_var, (yyvsp[0].string));   
+                }
                 YYACCEPT;
         }
-#line 1330 "y.tab.c" /* yacc.c:1646  */
+#line 1337 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 128 "prac.y" /* yacc.c:1646  */
+#line 135 "prac.y" /* yacc.c:1646  */
     {
-                printf("\tCleared variable %s\n", (yyvsp[0].string));
+                char* env_var = (yyvsp[0].string);
+                if(env_var == NULL)
+                        printf("\tVariable %s not found", (yyvsp[0].string));
+                else
+                {
+                         printf("\tCleared variable %s\n", env_var);
+                         unset_env(env_var);   
+                }
                 YYACCEPT;
         }
-#line 1339 "y.tab.c" /* yacc.c:1646  */
+#line 1353 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 136 "prac.y" /* yacc.c:1646  */
+#line 150 "prac.y" /* yacc.c:1646  */
     {
                 print_env();
                 YYACCEPT;
         }
-#line 1348 "y.tab.c" /* yacc.c:1646  */
+#line 1362 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 144 "prac.y" /* yacc.c:1646  */
+#line 158 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tThis command will show all aliases\n");
                 YYACCEPT;  
         }
-#line 1357 "y.tab.c" /* yacc.c:1646  */
+#line 1371 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 153 "prac.y" /* yacc.c:1646  */
+#line 167 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tSet alias %s to %s\n", (yyvsp[-1].string), (yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1366 "y.tab.c" /* yacc.c:1646  */
+#line 1380 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 161 "prac.y" /* yacc.c:1646  */
+#line 175 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tCleared alias %s\n", (yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1375 "y.tab.c" /* yacc.c:1646  */
+#line 1389 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 169 "prac.y" /* yacc.c:1646  */
+#line 183 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tBye!");
                 exitRequested = 1;
                 YYACCEPT;
         }
-#line 1385 "y.tab.c" /* yacc.c:1646  */
+#line 1399 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 177 "prac.y" /* yacc.c:1646  */
+#line 191 "prac.y" /* yacc.c:1646  */
     {
         }
-#line 1392 "y.tab.c" /* yacc.c:1646  */
+#line 1406 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 184 "prac.y" /* yacc.c:1646  */
+#line 198 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tCommand %s not recognized\n", invalid_cmd);
                 invalid_cmd = NULL;
                 YYACCEPT;
         }
-#line 1402 "y.tab.c" /* yacc.c:1646  */
+#line 1416 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 191 "prac.y" /* yacc.c:1646  */
+#line 205 "prac.y" /* yacc.c:1646  */
     {
                 if(invalid_cmd == NULL)
                         invalid_cmd = (yyvsp[0].string);
         }
-#line 1411 "y.tab.c" /* yacc.c:1646  */
+#line 1425 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1415 "y.tab.c" /* yacc.c:1646  */
+#line 1429 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1639,4 +1653,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 197 "prac.y" /* yacc.c:1906  */
+#line 211 "prac.y" /* yacc.c:1906  */
