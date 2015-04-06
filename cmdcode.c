@@ -74,4 +74,6 @@ void unset_alias(char* name){
         }
         ++i;
     }
+
+    printf("\tCleared alias %s\n", name);
 }

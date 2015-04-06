@@ -9,3 +9,4 @@ void set_env();
 void unset_env();
 void set_alias();
 void show_aliases();
+void unset_alias();
