@@ -488,7 +488,7 @@ static const yytype_uint8 yyrline[] =
        0,    47,    47,    48,    52,    54,    56,    58,    60,    62,
       64,    66,    68,    70,    72,    74,    76,    80,    93,   105,
      112,   120,   128,   136,   144,   153,   160,   165,   170,   175,
-     180,   185,   159,   197,   205,   213,   220,   227
+     180,   185,   159,   197,   206,   214,   221,   228
 };
 #endif
 
@@ -1447,50 +1447,51 @@ yyreduce:
   case 33:
 #line 198 "prac.y" /* yacc.c:1646  */
     {
-                printf("\tCleared alias %s\n", (yyvsp[0].string));
+                //printf("\tCleared alias %s\n", $2);
+                unset_alias((yyvsp[0].string));
                 YYACCEPT;
         }
-#line 1454 "y.tab.c" /* yacc.c:1646  */
+#line 1455 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 206 "prac.y" /* yacc.c:1646  */
+#line 207 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tBye!");
                 exitRequested = 1;
                 YYACCEPT;
         }
-#line 1464 "y.tab.c" /* yacc.c:1646  */
+#line 1465 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 214 "prac.y" /* yacc.c:1646  */
+#line 215 "prac.y" /* yacc.c:1646  */
     {
         }
-#line 1471 "y.tab.c" /* yacc.c:1646  */
+#line 1472 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 221 "prac.y" /* yacc.c:1646  */
+#line 222 "prac.y" /* yacc.c:1646  */
     {
                 printf("\tCommand %s not recognized\n", invalid_cmd);
                 invalid_cmd = NULL;
                 YYACCEPT;
         }
-#line 1481 "y.tab.c" /* yacc.c:1646  */
+#line 1482 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 228 "prac.y" /* yacc.c:1646  */
+#line 229 "prac.y" /* yacc.c:1646  */
     {
                 if(invalid_cmd == NULL)
                         invalid_cmd = (yyvsp[0].string);
         }
-#line 1490 "y.tab.c" /* yacc.c:1646  */
+#line 1491 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1494 "y.tab.c" /* yacc.c:1646  */
+#line 1495 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1718,4 +1719,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 234 "prac.y" /* yacc.c:1906  */
+#line 235 "prac.y" /* yacc.c:1906  */

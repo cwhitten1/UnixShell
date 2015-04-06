@@ -196,7 +196,8 @@ set_alias:
 unset_alias:
         TOKUNALIAS WORD
         {
-                printf("\tCleared alias %s\n", $2);
+                //printf("\tCleared alias %s\n", $2);
+                unset_alias($2);
                 YYACCEPT;
         }
         ;

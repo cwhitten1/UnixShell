@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "cmdcode.h"
 #include "alias.h"
 
@@ -58,6 +59,19 @@ void show_aliases(){
     }
 }
 
-/*void unset_alias(char* name){
+void unset_alias(char* name){
+    int i = 0;
+    bool found = false;
 
-}*/
+    while(!found){
+        if(strcmp(name, alias_table[i].ali) == 0){
+            int c = i; 
+            for(c; c <= alias_count-1; c++)
+                alias_table[c] = alias_table[c+1];
+            
+            found = true;
+            alias_count--;
+        }
+        ++i;
+    }
+}
