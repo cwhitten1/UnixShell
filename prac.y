@@ -6,6 +6,7 @@
 #include "command.h"
 #include "envar.h"
 #include "cmdcode.h"
+#include "alias.h"
 
 //int yydebug=1;
 
@@ -25,11 +26,13 @@ int yywrap()
 
 %}
 
-%token TOKCD TOKCD_HOME 
-%token TOKSETENV TOKCLEARENV TOKPRINTENV
-%token TOKALIAS TOKUNALIAS
-%token TOKNEWLINE TOKQUOTE
-%token TOKBYE
+
+%token <string> TOKCD
+%token <string> TOKSETENV TOKCLEARENV TOKPRINTENV
+%token <string> TOKALIAS TOKUNALIAS
+%token <string> TOKNEWLINE TOKQUOTE
+%token <string> TOKBYE 
+>>>>>>> origin/elli
 
 %union 
 {
@@ -128,7 +131,7 @@ print_env_var:
 show_aliases:
         TOKALIAS
         {
-                printf("\tThis command will show all aliases\n");
+                show_aliases();
                 YYACCEPT;  
         }
         ;
@@ -137,7 +140,43 @@ show_aliases:
 set_alias:
         TOKALIAS WORD WORD
         {
-                printf("\tSet alias %s to %s\n", $2, $3);
+                set_alias($2, $3);
+                YYACCEPT;
+        }
+        |
+        TOKALIAS WORD TOKCD_HOME
+        {
+                set_alias($2, $3);
+                YYACCEPT;
+        }
+        TOKALIAS WORD TOKSETENV
+        {
+                set_alias($2, $3);
+                YYACCEPT;
+        }
+        TOKALIAS WORD TOKCLEARENV
+        {
+                set_alias($2, $3);
+                YYACCEPT;
+        }
+        TOKALIAS WORD TOKPRINTENV
+        {
+                set_alias($2, $3);
+                YYACCEPT;
+        }
+        TOKALIAS WORD TOKALIAS
+        {
+                set_alias($2, $3);
+                YYACCEPT;
+        }
+        TOKALIAS WORD TOKUNALIAS
+        {
+                set_alias($2, $3);
+                YYACCEPT;
+        }
+        TOKALIAS WORD TOKBYE
+        {
+                set_alias($2, $3);
                 YYACCEPT;
         }
         ;
@@ -145,7 +184,7 @@ set_alias:
 unset_alias:
         TOKUNALIAS WORD
         {
-                printf("\tCleared alias %s\n", $2);
+                unset_alias($2);
                 YYACCEPT;
         }
         ;

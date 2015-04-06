@@ -3,6 +3,7 @@
 #include "y.tab.h"
 #include "command.h"
 #include "envar.h"
+#include "alias.h"
 
 struct command commands[MAX_COMMANDS];
 
