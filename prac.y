@@ -30,7 +30,7 @@ int yywrap()
 %token <string> TOKCD
 %token <string> TOKSETENV TOKCLEARENV TOKPRINTENV
 %token <string> TOKALIAS TOKUNALIAS
-%token <string> TOKNEWLINE TOKQUOTE
+%token <string> TOKENDEXP TOKQUOTE
 %token <string> TOKBYE 
 
 %union 
@@ -67,7 +67,7 @@ command:
         |
         bye
         |
-        newline
+        end_exp
         |
         quote
         |
@@ -82,7 +82,7 @@ change_dir:
         }
 
 change_dir_home:
-        TOKCD TOKNEWLINE
+        TOKCD TOKENDEXP
         {
                 change_dir(HOME);
                 YYACCEPT;
@@ -196,8 +196,8 @@ bye:
                 YYACCEPT;
         }
 
-newline:
-        TOKNEWLINE
+end_exp:
+        TOKENDEXP
         {
         }
         ;
@@ -209,7 +209,7 @@ quote:
 
 //This rule causes a shift/reduce conflict but I don't know why
 default:
-        default TOKNEWLINE
+        default TOKENDEXP
         {
                 printf("\tCommand \"%s\" not recognized\n", invalid_cmd);
                 invalid_cmd = NULL;

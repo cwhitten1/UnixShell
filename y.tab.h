@@ -51,7 +51,7 @@ extern int yydebug;
     TOKPRINTENV = 261,
     TOKALIAS = 262,
     TOKUNALIAS = 263,
-    TOKNEWLINE = 264,
+    TOKENDEXP = 264,
     TOKQUOTE = 265,
     TOKBYE = 266,
     NUMBER = 267,
@@ -66,7 +66,7 @@ extern int yydebug;
 #define TOKPRINTENV 261
 #define TOKALIAS 262
 #define TOKUNALIAS 263
-#define TOKNEWLINE 264
+#define TOKENDEXP 264
 #define TOKQUOTE 265
 #define TOKBYE 266
 #define NUMBER 267

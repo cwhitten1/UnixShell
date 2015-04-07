@@ -131,7 +131,7 @@ extern int yydebug;
     TOKPRINTENV = 261,
     TOKALIAS = 262,
     TOKUNALIAS = 263,
-    TOKNEWLINE = 264,
+    TOKENDEXP = 264,
     TOKQUOTE = 265,
     TOKBYE = 266,
     NUMBER = 267,
@@ -146,7 +146,7 @@ extern int yydebug;
 #define TOKPRINTENV 261
 #define TOKALIAS 262
 #define TOKUNALIAS 263
-#define TOKNEWLINE 264
+#define TOKENDEXP 264
 #define TOKQUOTE 265
 #define TOKBYE 266
 #define NUMBER 267
@@ -491,11 +491,11 @@ static const yytype_uint8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "TOKCD", "TOKSETENV", "TOKCLEARENV",
-  "TOKPRINTENV", "TOKALIAS", "TOKUNALIAS", "TOKNEWLINE", "TOKQUOTE",
+  "TOKPRINTENV", "TOKALIAS", "TOKUNALIAS", "TOKENDEXP", "TOKQUOTE",
   "TOKBYE", "NUMBER", "WORD", "TOKHEAT", "$accept", "commands", "command",
   "change_dir", "change_dir_home", "set_env_var", "unset_env_var",
   "print_env_var", "show_aliases", "set_alias", "$@1", "$@2", "$@3", "$@4",
-  "$@5", "$@6", "unset_alias", "bye", "newline", "quote", "default", YY_NULLPTR
+  "$@5", "$@6", "unset_alias", "bye", "end_exp", "quote", "default", YY_NULLPTR
 };
 #endif
 

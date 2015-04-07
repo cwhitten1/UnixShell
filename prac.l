@@ -6,6 +6,7 @@
 
 %}
 
+%option stack
 %x quotedword envExpansion
 %%
 
@@ -18,20 +19,25 @@ alias 					yylval.string = strdup(yytext);return TOKALIAS;
 unalias 				yylval.string = strdup(yytext);return TOKUNALIAS;
 bye 					yylval.string = strdup(yytext);return TOKBYE;
 
-[^<>|\&" \t\n$]+			yylval.string = strdup(yytext);return WORD;
+[^<>|\&" \t\n$]+		yylval.string = strdup(yytext);return WORD;
 
 
-\"						BEGIN(quotedword);
-<quotedword>[^<>|"\n\&]+      		yylval.string = strdup(yytext);return WORD;
-<quotedword>\"			BEGIN(INITIAL);
-<quotedword>\n 			printf(":p \">");
+\"						yy_push_state(quotedword);
+<quotedword>{
+	[^"\n\{\}]+      	yylval.string = strdup(yytext);return WORD;
+	\"					yy_pop_state();
+	\n 					printf(":p \">");
+	[\n\{\}]			/* ignore certain metacharacters*/
+}
 
-\$\{						BEGIN(envExpansion);
-<envExpansion>[^<>|\&" \t\n\{\}]+ 		yylval.string = getenv(yytext);return WORD;
-<envExpansion>\}		BEGIN(INITIAL);
-<envExpansion>[<>|\&" \t\n]		/* ignore certain metacharacters*/
+<*>\$\{					yy_push_state(envExpansion);
+<envExpansion>{
+	[^<>|\&" \t\n\{\}]+ yylval.string = getenv(yytext);return WORD;
+	\}					yy_pop_state();
+	\"					yy_push_state(quotedword);
+	[<>|\& \t\n]		/* ignore certain metacharacters*/
+}
 
-
-\n          			return TOKNEWLINE;
+\n          			return TOKENDEXP;
 [ \t]+      		/* ignore whitespace */;
 %%
