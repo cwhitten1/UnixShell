@@ -51,6 +51,7 @@ void flush_buffer(){
 
 
 void scan_string(char* str){
+	strcat(str, "\n");
 	yy_scan_string(str);
 	yyparse();
 	//yy_delete_buffer(bs);
