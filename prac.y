@@ -51,6 +51,8 @@ int yywrap()
 %%
 line: /* empty */ 
         |
+        TOKENDEXP {YYACCEPT;}
+        |
         commands TOKENDEXP {YYACCEPT;}
         |
         commands io_redir TOKENDEXP {YYACCEPT;}
@@ -92,8 +94,6 @@ command:
         unset_alias
         |
         bye
-        |
-        end_exp
         |
         quote
         ;
@@ -171,31 +171,37 @@ set_alias:
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKSETENV
         {
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKCLEARENV
         {
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKPRINTENV
         {
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKALIAS
         {
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKUNALIAS
         {
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKBYE
         {
                 set_alias($2, $3);
@@ -219,11 +225,6 @@ bye:
                 
         }
 
-end_exp:
-        TOKENDEXP
-        {
-        }
-        ;
 quote:
         TOKQUOTE
         {
