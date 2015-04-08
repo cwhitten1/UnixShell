@@ -10,7 +10,7 @@
 %x quotedword envExpansion
 %%
 
-[0-9]+    				yylval.number=atoi(yytext); return NUMBER;
+[0-9]+    				yylval.number = atoi(yytext); return NUMBER;
 cd 						yylval.string = strdup(yytext);return TOKCD;
 setenv 					yylval.string = strdup(yytext);return TOKSETENV;
 unsetenv				yylval.string = strdup(yytext);return TOKCLEARENV;
@@ -45,7 +45,14 @@ bye 					yylval.string = strdup(yytext);return TOKBYE;
 [ \t]+      		/* ignore whitespace */;
 %%
 
-
 void flush_buffer(){
 	yy_flush_buffer(YY_CURRENT_BUFFER);
+}
+
+
+void scan_string(char* str){
+	yy_scan_string(str);
+	yyparse();
+	//yy_delete_buffer(bs);
+	yylex_destroy();
 }

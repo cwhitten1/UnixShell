@@ -60,16 +60,21 @@ void set_alias(char* name, char* word){
 }
 
 void show_aliases(){
-    int i = 0;
+    if(alias_count == 0){
+        printf("\tThere are no aliases\n");
+    }
+    else{
+        int i = 0;
 
-    while(i != alias_count)
-    {
-        char* name = alias_table[i].ali;
-        char* word = alias_table[i].cmd;
+        while(i != alias_count)
+        {
+            char* name = alias_table[i].ali;
+            char* word = alias_table[i].cmd;
 
-        ++i;
+            ++i;
 
-        printf("\tAlias: %s \tCommand: %s\n", name, word);
+            printf("\tAlias: %s \tCommand: %s\n", name, word);
+        }
     }
 }
 
@@ -90,4 +95,22 @@ void unset_alias(char* name){
     }
 
     printf("\tCleared alias %s\n", name);
+}
+
+int is_alias(char* name){
+    int i = 0;
+
+    for(i; i <= alias_count-1; ++i){
+        if(strcmp(name, alias_table[i].ali) == 0)
+            return 1;
+    }
+}
+
+char* get_alias_cmd(char* name){
+    int i = 0;
+
+    for(i; i <= alias_count-1; ++i){
+        if(strcmp(name, alias_table[i].ali) == 0)
+            return alias_table[i].cmd;
+    }
 }

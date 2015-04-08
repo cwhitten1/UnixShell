@@ -9,10 +9,11 @@
 #include "alias.h"
 #include "io_redir.h"
 
+
 //int yydebug=1;
 
 int cmdtab_next = 0;
-char* invalid_cmd;
+char* first_cmd;
 
 void yyerror(const char *str)
 {
@@ -35,6 +36,7 @@ int yywrap()
 %token <string> TOKBYE 
 %token TOKENDEXP TOKPIPE TOK_IO_REDIR_IN TOK_IO_REDIR_OUT
 
+
 %union 
 {
         int number;
@@ -54,8 +56,14 @@ line: /* empty */
         commands io_redir TOKENDEXP {YYACCEPT;}
         |
         default TOKENDEXP{
-                printf("\tCommand \"%s\" not recognized\n", invalid_cmd);
-                invalid_cmd = NULL;
+                if(is_alias(first_cmd) == 1){
+
+                    scan_string(get_alias_cmd(first_cmd));
+                }
+                else
+                    printf("\tCommand %s not recognized\n", first_cmd);
+
+                first_cmd = NULL;
                 YYACCEPT;
                 }
         ;
@@ -102,6 +110,12 @@ change_dir_home:
         {
                 change_dir(HOME);
                 
+        }
+        |
+        TOKCD
+        {
+                change_dir(HOME);
+                YYACCEPT;
         }
         ;
 
@@ -238,8 +252,8 @@ default:
         |
         WORD
         {
-                if(invalid_cmd == NULL)
-                        invalid_cmd = $1;
+                if(first_cmd == NULL)
+                        first_cmd = $1;
         }
         ;
         
