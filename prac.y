@@ -41,7 +41,9 @@ int yywrap()
         char *string;
 }
 
+%token <number> NUMBER
 %token <string> WORD
+%token <string> TOKHEAT
 
 %start line
 
