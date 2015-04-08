@@ -7,6 +7,7 @@
 #include "envar.h"
 #include "cmdcode.h"
 #include "alias.h"
+#include "io_redir.h"
 
 //int yydebug=1;
 
@@ -16,7 +17,7 @@ char* invalid_cmd;
 void yyerror(const char *str)
 {
         flush_buffer();
-        fprintf(stderr,"error: %s\n",str);
+        fprintf(stderr,"\terror: %s\n",str);
 }
  
 int yywrap()
@@ -44,10 +45,26 @@ int yywrap()
 %token <string> WORD
 %token <string> TOKHEAT
 
+%start line
+
 %%
-commands: /* empty */
+line: /* empty */ 
+        |
+        commands TOKENDEXP {YYACCEPT;}
+        |
+        commands io_redir TOKENDEXP {YYACCEPT;}
+        |
+        default TOKENDEXP{
+                printf("\tCommand \"%s\" not recognized\n", invalid_cmd);
+                invalid_cmd = NULL;
+                YYACCEPT;
+                }
+        ;
+
+commands: 
+        command
         | 
-        commands command
+        commands TOKPIPE command
         ;
 
 command:
@@ -72,24 +89,20 @@ command:
         end_exp
         |
         quote
-        |
-        default
-        |
-        io_redir
         ;
 
 change_dir:
         TOKCD WORD
         {
                 change_dir($2);
-                YYACCEPT;
+                
         }
 
 change_dir_home:
-        TOKCD TOKENDEXP
+        TOKCD
         {
                 change_dir(HOME);
-                YYACCEPT;
+                
         }
         ;
 
@@ -104,7 +117,7 @@ set_env_var:
                          printf("\tSet variable %s to %s\n", env_var, $3);
                          set_env(env_var, $3);   
                 }
-                YYACCEPT;
+                
         }
         ;
 
@@ -119,7 +132,7 @@ unset_env_var:
                          printf("\tCleared variable %s\n", env_var);
                          unset_env(env_var);   
                 }
-                YYACCEPT;
+                
         }
         ;
 
@@ -127,7 +140,7 @@ print_env_var:
         TOKPRINTENV
         {
                 print_env();
-                YYACCEPT;
+                
         }
         ;
 
@@ -135,7 +148,7 @@ show_aliases:
         TOKALIAS
         {
                 show_aliases();
-                YYACCEPT;  
+                  
         }
         ;
 
@@ -144,43 +157,43 @@ set_alias:
         TOKALIAS WORD WORD
         {
                 set_alias($2, $3);
-                YYACCEPT;
+                
         }
         |
         TOKALIAS WORD TOKCD
         {
                 set_alias($2, $3);
-                YYACCEPT;
+                
         }
         TOKALIAS WORD TOKSETENV
         {
                 set_alias($2, $3);
-                YYACCEPT;
+                
         }
         TOKALIAS WORD TOKCLEARENV
         {
                 set_alias($2, $3);
-                YYACCEPT;
+                
         }
         TOKALIAS WORD TOKPRINTENV
         {
                 set_alias($2, $3);
-                YYACCEPT;
+                
         }
         TOKALIAS WORD TOKALIAS
         {
                 set_alias($2, $3);
-                YYACCEPT;
+                
         }
         TOKALIAS WORD TOKUNALIAS
         {
                 set_alias($2, $3);
-                YYACCEPT;
+                
         }
         TOKALIAS WORD TOKBYE
         {
                 set_alias($2, $3);
-                YYACCEPT;
+                
         }
         ;
 
@@ -188,7 +201,7 @@ unset_alias:
         TOKUNALIAS WORD
         {
                 unset_alias($2);
-                YYACCEPT;
+                
         }
         ;
 
@@ -197,7 +210,7 @@ bye:
         {
                 printf("\tBye!");
                 exitRequested = 1;
-                YYACCEPT;
+                
         }
 
 end_exp:
@@ -210,32 +223,26 @@ quote:
         {
         }
         ;
-
-//This rule causes a shift/reduce conflict but I don't know why
-default:
-        default TOKENDEXP
-        {
-                printf("\tCommand \"%s\" not recognized\n", invalid_cmd);
-                invalid_cmd = NULL;
-                YYACCEPT;
-        }
-        |
-        WORD
-        {
-                if(invalid_cmd == NULL)
-                        invalid_cmd = $1;
-        }
-        ;
-
 io_redir:
         TOK_IO_REDIR_IN WORD
         {
-                printf("Redirecting input to %s", $2);
+                redirect_in($2);
         }
         |
         TOK_IO_REDIR_OUT WORD
         {
                 printf("Redirecting output to %s", $2);
+        }
+        ;
+
+//This rule causes a shift/reduce conflict but I don't know why
+default:
+        default WORD
+        |
+        WORD
+        {
+                if(invalid_cmd == NULL)
+                        invalid_cmd = $1;
         }
         ;
         
