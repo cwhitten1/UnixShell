@@ -111,14 +111,8 @@ change_dir_home:
                 change_dir(HOME);
                 
         }
-        |
-        TOKCD
-        {
-                change_dir(HOME);
-                YYACCEPT;
-        }
         ;
-
+        
 set_env_var:
         TOKSETENV WORD WORD
         {
