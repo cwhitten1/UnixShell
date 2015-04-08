@@ -9,8 +9,10 @@ void redirect_in(char* fn){
 		return;
 	}
 
-	dup2(fd, 0);
-	close(fd);
+	printf("\tFile %s found!\n", fn);
+
+	//dup2(fd, 0);
+	//close(fd);
 }
 void redirect_out(char* fo){
 
