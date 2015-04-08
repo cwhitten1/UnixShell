@@ -15,14 +15,14 @@ char* invalid_cmd;
 
 void yyerror(const char *str)
 {
+        flush_buffer();
         fprintf(stderr,"error: %s\n",str);
 }
  
 int yywrap()
 {
         return 1;
-} 
-
+}
 
 %}
 
@@ -30,8 +30,9 @@ int yywrap()
 %token <string> TOKCD
 %token <string> TOKSETENV TOKCLEARENV TOKPRINTENV
 %token <string> TOKALIAS TOKUNALIAS
-%token <string> TOKENDEXP TOKQUOTE
+%token <string> TOKQUOTE
 %token <string> TOKBYE 
+%token TOKENDEXP TOKPIPE TOK_IO_REDIR_IN TOK_IO_REDIR_OUT
 
 %union 
 {
@@ -45,7 +46,8 @@ int yywrap()
 
 %%
 commands: /* empty */
-        | commands command
+        | 
+        commands command
         ;
 
 command:
@@ -72,6 +74,8 @@ command:
         quote
         |
         default
+        |
+        io_redir
         ;
 
 change_dir:
@@ -222,5 +226,17 @@ default:
                         invalid_cmd = $1;
         }
         ;
-       
+
+io_redir:
+        TOK_IO_REDIR_IN WORD
+        {
+                printf("Redirecting input to %s", $2);
+        }
+        |
+        TOK_IO_REDIR_OUT WORD
+        {
+                printf("Redirecting output to %s", $2);
+        }
+        ;
+        
 %%

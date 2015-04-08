@@ -38,6 +38,14 @@ bye 					yylval.string = strdup(yytext);return TOKBYE;
 	[<>|\& \t\n]		/* ignore certain metacharacters*/
 }
 
+\| 						return TOKPIPE;
+\<						return TOK_IO_REDIR_IN;
+\> 						return TOK_IO_REDIR_OUT;
 \n          			return TOKENDEXP;
 [ \t]+      		/* ignore whitespace */;
 %%
+
+
+void flush_buffer(){
+	yy_flush_buffer(YY_CURRENT_BUFFER);
+}

@@ -51,12 +51,15 @@ extern int yydebug;
     TOKPRINTENV = 261,
     TOKALIAS = 262,
     TOKUNALIAS = 263,
-    TOKENDEXP = 264,
-    TOKQUOTE = 265,
-    TOKBYE = 266,
-    NUMBER = 267,
-    WORD = 268,
-    TOKHEAT = 269
+    TOKQUOTE = 264,
+    TOKBYE = 265,
+    TOKENDEXP = 266,
+    TOKPIPE = 267,
+    TOK_IO_REDIR_IN = 268,
+    TOK_IO_REDIR_OUT = 269,
+    NUMBER = 270,
+    WORD = 271,
+    TOKHEAT = 272
   };
 #endif
 /* Tokens.  */
@@ -66,24 +69,27 @@ extern int yydebug;
 #define TOKPRINTENV 261
 #define TOKALIAS 262
 #define TOKUNALIAS 263
-#define TOKENDEXP 264
-#define TOKQUOTE 265
-#define TOKBYE 266
-#define NUMBER 267
-#define WORD 268
-#define TOKHEAT 269
+#define TOKQUOTE 264
+#define TOKBYE 265
+#define TOKENDEXP 266
+#define TOKPIPE 267
+#define TOK_IO_REDIR_IN 268
+#define TOK_IO_REDIR_OUT 269
+#define NUMBER 270
+#define WORD 271
+#define TOKHEAT 272
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 37 "prac.y" /* yacc.c:1909  */
+#line 38 "prac.y" /* yacc.c:1909  */
 
         int number;
         char *string;
 
-#line 87 "y.tab.h" /* yacc.c:1909  */
+#line 93 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
