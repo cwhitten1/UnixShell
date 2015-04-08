@@ -43,7 +43,6 @@ int yywrap()
 
 %token <number> NUMBER
 %token <string> WORD
-%token <string> TOKHEAT
 
 %start line
 
@@ -152,7 +151,6 @@ show_aliases:
         }
         ;
 
-//This rule causes a shift/reduce conflict but I don't know why
 set_alias:
         TOKALIAS WORD WORD
         {
@@ -235,7 +233,6 @@ io_redir:
         }
         ;
 
-//This rule causes a shift/reduce conflict but I don't know why
 default:
         default WORD
         |
