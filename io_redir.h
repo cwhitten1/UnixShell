@@ -1,4 +1,8 @@
 #include <string.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 void redirect_in(char* fn);		/* Redirect stdin to file fn*/
 void redirect_out(char* fo);	/* Redirect stdout to file fo*/
