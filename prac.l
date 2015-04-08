@@ -4,12 +4,13 @@
 #include "y.tab.h"
 
 int inQuoteMode = 0;
+
 %}
 
 %x quotedword
 %%
 
-[0-9]+    				yylval.number=atoi(yytext); return NUMBER;
+[0-9]+    				yylval.number = atoi(yytext); return NUMBER;
 cd 						yylval.string = strdup(yytext);return TOKCD;
 setenv 					yylval.string = strdup(yytext);return TOKSETENV;
 unsetenv				yylval.string = strdup(yytext);return TOKCLEARENV;
@@ -29,4 +30,13 @@ bye 					yylval.string = strdup(yytext);return TOKBYE;
 
 \n          			return TOKNEWLINE;
 [ \t]+      		/* ignore whitespace */;
+
 %%
+
+void scan_string(char* str){
+	yy_scan_string(str);
+	yyparse();
+	//yy_delete_buffer(bs);
+	yylex_destroy();
+}
+

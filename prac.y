@@ -8,10 +8,11 @@
 #include "cmdcode.h"
 #include "alias.h"
 
-//int yydebug=1;
+
+int yydebug=1;
 
 int cmdtab_next = 0;
-char* invalid_cmd;
+char* first_cmd;
 
 void yyerror(const char *str)
 {
@@ -32,7 +33,6 @@ int yywrap()
 %token <string> TOKALIAS TOKUNALIAS
 %token <string> TOKNEWLINE TOKQUOTE
 %token <string> TOKBYE 
->>>>>>> origin/elli
 
 %union 
 {
@@ -84,6 +84,12 @@ change_dir:
 
 change_dir_home:
         TOKCD TOKNEWLINE
+        {
+                change_dir(HOME);
+                YYACCEPT;
+        }
+        |
+        TOKCD
         {
                 change_dir(HOME);
                 YYACCEPT;
@@ -144,7 +150,7 @@ set_alias:
                 YYACCEPT;
         }
         |
-        TOKALIAS WORD TOKCD_HOME
+        TOKALIAS WORD TOKCD
         {
                 set_alias($2, $3);
                 YYACCEPT;
@@ -212,15 +218,21 @@ quote:
 default:
         default TOKNEWLINE
         {
-                printf("\tCommand %s not recognized\n", invalid_cmd);
-                invalid_cmd = NULL;
+                if(is_alias(first_cmd) == 1){
+
+                    scan_string(get_alias_cmd(first_cmd));
+                }
+                else
+                    printf("\tCommand %s not recognized\n", first_cmd);
+
+                first_cmd = NULL;
                 YYACCEPT;
         }
         |
         WORD
         {
-                if(invalid_cmd == NULL)
-                        invalid_cmd = $1;
+                if(first_cmd == NULL)
+                        first_cmd = $1;
         }
         ;
        
