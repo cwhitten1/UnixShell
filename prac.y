@@ -15,7 +15,8 @@
 
 int cmdtab_curr = 0;
 int cmdtab_start = 0;
-int cmdtab_end = 0;
+int appendOutputRequested = 0;
+
 char* first_cmd;
 
 void yyerror(const char *str)
@@ -46,6 +47,19 @@ void addCommand(char* name, int cmd_id, int argnum, ...)
         va_end(args);
 }
 
+void addInputRedirection(int cmd_index, char* in_fn)
+{
+        struct command *cmd = &commands[cmd_index];
+        cmd->infile = in_fn;
+}       
+
+void addOutputRedirection(int cmd_index, char* out_fn, int appendOut)
+{
+        struct command *cmd = &commands[cmd_index];
+        cmd->outfile = strdup(out_fn);
+        cmd->appendOut = appendOut;
+}       
+
 %}
 
 
@@ -66,6 +80,11 @@ void addCommand(char* name, int cmd_id, int argnum, ...)
 %token <number> NUMBER
 %token <string> WORD
 
+%type<string> io_redir_in
+%type<string> io_redir_out
+%type<string> io_redir_out_append
+%type<string> io_redir
+
 %start line
 
 %%
@@ -83,6 +102,11 @@ line: /* empty */
         |
         commands io_redir TOKENDEXP 
         {
+                if(appendOutputRequested)
+                        addOutputRedirection(cmdtab_curr, $2, 1);
+                else
+                        addOutputRedirection(cmdtab_curr, $2, 0);
+
                 YYACCEPT;
         }
         |
@@ -245,20 +269,64 @@ quote:
         ;
 
 io_redir:
+        io_redir_in io_redir_out 
+        {
+                addInputRedirection(cmdtab_start, $1); //Add input redir to start command
+                $$ = $2; //We don't know the final ending command index so we don't do output redir yet.
+        }
+        |
+        io_redir_in io_redir_out_append
+        {
+                addInputRedirection(cmdtab_start, $1);
+                $$ = $2; 
+        }
+        |
+        io_redir_out io_redir_in
+        {
+                addInputRedirection(cmdtab_start, $2);
+                $$ = $1; 
+        }
+        |
+        io_redir_out_append io_redir_in
+        {
+                addInputRedirection(cmdtab_start, $2);
+                $$ = $1; 
+        }
+        |
+        io_redir_in
+        {
+                addInputRedirection(cmdtab_start, $1);
+        }
+        | 
+        io_redir_out
+        {
+                $$ = $1; 
+        }
+        |
+        io_redir_out_append
+        {
+                $$ = $1; 
+        }
+        ;
+
+io_redir_in:
         TOK_IO_REDIR_IN WORD
         {
-                redirect_in($2);
+               $$ = $2;
         }
-        |
+        ;
+
+io_redir_out:
         TOK_IO_REDIR_OUT WORD
         {
-                printf("Redirecting output to %s", $2);
-                redirect_out($2, 0); //Redirect with override
+               $$ = $2;
         }
-        |
+
+io_redir_out_append:
         TOK_IO_REDIR_OUT_APPEND WORD
         {
-
+                appendOutputRequested = 1;
+                $$ = $2;
         }
         ;
 

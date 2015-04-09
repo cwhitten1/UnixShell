@@ -12,6 +12,7 @@ struct command{
 	int 	argnum;
 	char*	infile;
 	char*	outfile;
+	int 	appendOut;
 };
 
 extern struct command commands[];
