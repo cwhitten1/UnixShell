@@ -23,13 +23,14 @@ void shell_init(){
 
 void printCommandTable(){
 	int i;
-	printf("Current ind: %d\n", cmdtab_curr);
+	printf("\n\n\nCurrent ind: %d\n", cmdtab_curr);
 	for(i=0;i<MAX_COMMANDS;i++)
 	{
 			struct command cmd = commands[i];
 			printf("%d: %s | %d | %d | %s | %s\n", i, cmd.name, cmd.cmd_id, cmd.argnum, cmd.infile, cmd.outfile);
 
 	}
+	printf("\n\n");
 
 }
 void handleCommand(){
