@@ -19,4 +19,3 @@ extern struct command commands[];
 //Table indexes
 extern int cmdtab_curr; /* The current index for parsing a line of commands */
 extern int cmdtab_start; /* The start index for a line of commands */
-extern int cmdtab_end; /* The end index for a line of commands */

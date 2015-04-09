@@ -33,20 +33,28 @@ void printCommandTable(){
 
 }
 void handleCommand(){
-	int cmd_ind = cmdtab_curr % MAX_COMMANDS;
-	struct command cmd = commands[cmd_ind];
-	switch(cmd.cmd_id){
-		case CD: change_dir(cmd.args[0]); break;
-		case SETENV: set_env(cmd.args[0], cmd.args[1], 1);break;
-		case UNSETENV: unset_env(cmd.args[0], 1);break;
-		case PRINTENV: print_env();break;
-		case SHOW_ALIAS: show_aliases();break;
-		case SET_ALIAS: set_alias(cmd.args[0], cmd.args[1]);break;
-		case UNSET_ALIAS: unset_alias(cmd.args[0]);
-		case BYE: printf("\tBye!"); exitRequested = 1;break;
-		default: break;
-	}
 
+	//cmdtab_curr will point to end of the commands if piped commands were entered
+	//Will point to the same as start if a single command is entered
+	while(cmdtab_start <= cmdtab_curr)
+	{
+		int cmd_ind = cmdtab_start % MAX_COMMANDS;
+		struct command cmd = commands[cmd_ind];
+		switch(cmd.cmd_id){
+			case CD: change_dir(cmd.args[0]); break;
+			case SETENV: set_env(cmd.args[0], cmd.args[1], 1);break;
+			case UNSETENV: unset_env(cmd.args[0], 1);break;
+			case PRINTENV: print_env();break;
+			case SHOW_ALIAS: show_aliases();break;
+			case SET_ALIAS: set_alias(cmd.args[0], cmd.args[1]);break;
+			case UNSET_ALIAS: unset_alias(cmd.args[0]);
+			case BYE: printf("\tBye!"); exitRequested = 1;break;
+			default: break;
+		}
+		cmdtab_start++;
+	}
+	//cmdtab_start will now point to the next slot in the circular buffer
+	//cmdtab_curr needs to point to the next slot
 	cmdtab_curr++;
 }
 
