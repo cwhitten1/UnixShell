@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdarg.h>
 #include "command.h"
 #include "envar.h"
 #include "cmdcode.h"
@@ -12,7 +13,9 @@
 
 //int yydebug=1;
 
-int cmdtab_next = 0;
+int cmdtab_curr = 0;
+int cmdtab_start = 0;
+int cmdtab_end = 0;
 char* first_cmd;
 
 void yyerror(const char *str)
@@ -26,6 +29,22 @@ int yywrap()
         return 1;
 }
 
+void addCommand(char* name, int cmd_id, int argnum, ...)
+{
+        struct command *cmd = &commands[cmdtab_curr];
+        cmd->name = name;
+        cmd->cmd_id = cmd_id;
+        cmd->argnum = argnum;
+
+        va_list args;
+        va_start(args, argnum);
+        int i;
+        for(i = 0; i < argnum; i++){
+                cmd->args[i] = va_arg(args, char*);
+        }
+        va_end(args);
+}
+
 %}
 
 
@@ -34,7 +53,7 @@ int yywrap()
 %token <string> TOKALIAS TOKUNALIAS
 %token <string> TOKQUOTE
 %token <string> TOKBYE 
-%token TOKENDEXP TOKPIPE TOK_IO_REDIR_IN TOK_IO_REDIR_OUT
+%token TOKENDEXP TOKPIPE TOK_IO_REDIR_IN TOK_IO_REDIR_OUT TOK_IO_REDIR_OUT_APPEND
 
 
 %union 
@@ -63,7 +82,10 @@ line: /* empty */
                     scan_string(get_alias_cmd(first_cmd));
                 }
                 else
+                {
                     printf("\tCommand %s not recognized\n", first_cmd);
+                    YYERROR;
+                }
 
                 first_cmd = NULL;
                 YYACCEPT;
@@ -71,13 +93,13 @@ line: /* empty */
         ;
 
 commands: 
-        command
+        command 
         | 
         commands TOKPIPE command
         ;
 
 command:
-        change_dir
+        change_dir 
         |
         change_dir_home
         |
@@ -101,44 +123,29 @@ command:
 change_dir:
         TOKCD WORD
         {
-                change_dir($2);
-                
+                //change_dir($2);
+                addCommand("CD", CD, 1, $2);
         }
 
 change_dir_home:
         TOKCD
         {
-                change_dir(HOME);
-                
+                //change_dir(HOME);
+                addCommand("CD", CD, 1, HOME);
         }
         ;
         
 set_env_var:
         TOKSETENV WORD WORD
         {
-                char* env_var = $2;
-                if(env_var == NULL)
-                        printf("\tVariable %s not found", $2);
-                else
-                {
-                         printf("\tSet variable %s to %s\n", env_var, $3);
-                         set_env(env_var, $3);   
-                }
-                
+                addCommand("SETENV", SETENV, 2, $2, $3);
         }
         ;
 
 unset_env_var:
         TOKCLEARENV WORD
         {
-                char* env_var = $2;
-                if(env_var == NULL)
-                        printf("\tVariable %s not found", $2);
-                else
-                {
-                         printf("\tCleared variable %s\n", env_var);
-                         unset_env(env_var);   
-                }
+                addCommand("UNSETENV", UNSETENV, 1, $2);
                 
         }
         ;
@@ -146,7 +153,7 @@ unset_env_var:
 print_env_var:
         TOKPRINTENV
         {
-                print_env();
+                addCommand("PRINTENV", PRINTENV, 0);
                 
         }
         ;
@@ -154,7 +161,7 @@ print_env_var:
 show_aliases:
         TOKALIAS
         {
-                show_aliases();
+                addCommand("SHOW_ALIAS", SHOW_ALIAS, 0);
                   
         }
         ;
@@ -162,49 +169,49 @@ show_aliases:
 set_alias:
         TOKALIAS WORD WORD
         {
-                set_alias($2, $3);
+               addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKCD
         {
-                set_alias($2, $3);
+                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKSETENV
         {
-                set_alias($2, $3);
+                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKCLEARENV
         {
-                set_alias($2, $3);
+                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKPRINTENV
         {
-                set_alias($2, $3);
+                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKALIAS
         {
-                set_alias($2, $3);
+                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKUNALIAS
         {
-                set_alias($2, $3);
+                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKBYE
         {
-                set_alias($2, $3);
+                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         ;
@@ -212,7 +219,7 @@ set_alias:
 unset_alias:
         TOKUNALIAS WORD
         {
-                unset_alias($2);
+                addCommand("UNALIAS", UNSET_ALIAS, 1, $2);
                 
         }
         ;
@@ -220,9 +227,7 @@ unset_alias:
 bye:
         TOKBYE
         {
-                printf("\tBye!");
-                exitRequested = 1;
-                
+                addCommand("BYE", BYE, 0);    
         }
 
 quote:
@@ -230,6 +235,7 @@ quote:
         {
         }
         ;
+
 io_redir:
         TOK_IO_REDIR_IN WORD
         {
@@ -239,6 +245,12 @@ io_redir:
         TOK_IO_REDIR_OUT WORD
         {
                 printf("Redirecting output to %s", $2);
+                redirect_out($2, 0); //Redirect with override
+        }
+        |
+        TOK_IO_REDIR_OUT_APPEND WORD
+        {
+
         }
         ;
 

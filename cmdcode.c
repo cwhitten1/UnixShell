@@ -15,7 +15,7 @@ void print_env(){
 	printf("\n\n\n\n");
 }
 
-void set_env(char* env_var, char* val){
+void set_env(char* env_var, char* val, int printOutput){
 
     //Copy new value to local variable (if one exists i.e. PATH)
     char* env_var_local = getLocalEnvironmentVariable(env_var);
@@ -24,9 +24,19 @@ void set_env(char* env_var, char* val){
 
     //Modify process environment variable
     int success = setenv(env_var, val, 1); //Returns 0 on success, -1 otherwise
+
+    if(printOutput)
+    {
+        if(success != 0)
+                printf("\tVariable %s not found", env_var);
+        else
+        {
+                 printf("\tSet variable %s to %s\n", env_var, val); 
+        }
+    }
 }
 
-void unset_env(char* env_var){
+void unset_env(char* env_var, int printOutput){
     //Remove local copy
 	char* env_var_local = getLocalEnvironmentVariable(env_var);
     if(env_var_local != NULL)
@@ -34,6 +44,15 @@ void unset_env(char* env_var){
 
     //Modify process environment variable
     int success = unsetenv(env_var); //Returns 0 on success, -1 otherwise
+    if(printOutput)
+    {
+        if(success != 0)
+                printf("\tVariable %s not found", env_var);
+        else
+        {
+                 printf("\tCleared variable %s\n", env_var);
+        }
+    }
 }
 
 void change_dir(char* word){
@@ -43,7 +62,7 @@ void change_dir(char* word){
     if(success == 0)
     {
     	printf("\tChanged directory to %s\n", cwd);
-    	set_env("PWD", cwd);
+    	set_env("PWD", cwd, 0);
     }
     else
     	printf("\tDirectory \"%s\" not found\n", word);

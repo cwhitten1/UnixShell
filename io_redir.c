@@ -11,10 +11,20 @@ void redirect_in(char* fn){
 
 	printf("\tFile %s found!\n", fn);
 
-	//dup2(fd, 0);
-	//close(fd);
+	dup2(fd, 0);
+	close(fd);
 }
-void redirect_out(char* fo){
+void redirect_out(char* fn, int append){
+	int fd;
+
+	if(append)
+		fd = open(fn, O_CREAT|O_WRONLY|O_APPEND);
+	else
+		fd = open(fn, O_CREAT|O_WRONLY);
+
+	dup2(fd, 1);
+	//close(fd);
+
 
 }
 void reset_in(){

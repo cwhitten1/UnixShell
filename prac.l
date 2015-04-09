@@ -41,6 +41,7 @@ bye 					yylval.string = strdup(yytext);return TOKBYE;
 \| 						return TOKPIPE;
 \<						return TOK_IO_REDIR_IN;
 \> 						return TOK_IO_REDIR_OUT;
+\>\>					return TOK_IO_REDIR_OUT_APPEND;
 \n          			return TOKENDEXP;
 [ \t]+      		/* ignore whitespace */;
 %%
@@ -51,8 +52,10 @@ void flush_buffer(){
 
 
 void scan_string(char* str){
-	strcat(str, "\n");
-	yy_scan_string(str);
+	char* new_str;
+	strcpy(new_str, str);
+	strcat(new_str, "\n");
+	yy_scan_string(new_str);
 	yyparse();
 	//yy_delete_buffer(bs);
 	yylex_destroy();
