@@ -3,7 +3,7 @@
  */
 #include <string.h>
 #define MAX_ARGS 30
-#define MAX_COMMANDS 100
+#define MAX_COMMANDS 10
 
 struct command{
 	char* 	name;

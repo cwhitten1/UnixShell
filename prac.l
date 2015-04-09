@@ -53,7 +53,7 @@ void flush_buffer(){
 
 void scan_string(char* str){
 	char* new_str;
-	strcpy(new_str, str);
+	new_str = strdup(str);
 	strcat(new_str, "\n");
 	yy_scan_string(new_str);
 	yyparse();

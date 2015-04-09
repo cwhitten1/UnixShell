@@ -31,7 +31,8 @@ int yywrap()
 
 void addCommand(char* name, int cmd_id, int argnum, ...)
 {
-        struct command *cmd = &commands[cmdtab_curr];
+        int cmd_ind = cmdtab_curr % MAX_COMMANDS;
+        struct command *cmd = &commands[cmd_ind];
         cmd->name = name;
         cmd->cmd_id = cmd_id;
         cmd->argnum = argnum;
@@ -70,11 +71,20 @@ void addCommand(char* name, int cmd_id, int argnum, ...)
 %%
 line: /* empty */ 
         |
-        TOKENDEXP {YYACCEPT;}
+        TOKENDEXP 
+        {
+                YYACCEPT;
+        }
         |
-        commands TOKENDEXP {YYACCEPT;}
+        commands TOKENDEXP 
+        {      
+                YYACCEPT;
+        }
         |
-        commands io_redir TOKENDEXP {YYACCEPT;}
+        commands io_redir TOKENDEXP 
+        {
+                YYACCEPT;
+        }
         |
         default TOKENDEXP{
                 if(is_alias(first_cmd) == 1){
@@ -95,7 +105,7 @@ line: /* empty */
 commands: 
         command 
         | 
-        commands TOKPIPE command
+        commands TOKPIPE {++cmdtab_curr;} command 
         ;
 
 command:
@@ -123,14 +133,12 @@ command:
 change_dir:
         TOKCD WORD
         {
-                //change_dir($2);
                 addCommand("CD", CD, 1, $2);
         }
 
 change_dir_home:
         TOKCD
         {
-                //change_dir(HOME);
                 addCommand("CD", CD, 1, HOME);
         }
         ;
