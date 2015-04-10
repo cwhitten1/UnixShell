@@ -60,6 +60,7 @@ line: /* empty */
                 
                 if(aliasIndex != -1){
                     char* cmd = get_alias_cmd(aliasIndex);
+                    first_cmd = NULL;
                     scan_string(cmd);
                 }
                 else
