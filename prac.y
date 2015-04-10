@@ -56,16 +56,18 @@ line: /* empty */
         commands io_redir TOKENDEXP {YYACCEPT;}
         |
         default TOKENDEXP{
-                if(is_alias(first_cmd) == 1){
-
-                    scan_string(get_alias_cmd(first_cmd));
+                int aliasIndex = is_alias(first_cmd);
+                
+                if(aliasIndex != -1){
+                    char* cmd = get_alias_cmd(aliasIndex);
+                    scan_string(cmd);
                 }
                 else
                     printf("\tCommand %s not recognized\n", first_cmd);
 
                 first_cmd = NULL;
                 YYACCEPT;
-                }
+        }
         ;
 
 commands: 
@@ -171,31 +173,37 @@ set_alias:
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKSETENV
         {
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKCLEARENV
         {
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKPRINTENV
         {
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKALIAS
         {
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKUNALIAS
         {
                 set_alias($2, $3);
                 
         }
+        |
         TOKALIAS WORD TOKBYE
         {
                 set_alias($2, $3);
