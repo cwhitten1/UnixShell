@@ -23,9 +23,10 @@ void set_env(char* env_var, char* val, int printOutput);
 void unset_env(char* env_var, int printOutput);
 void show_aliases();
 void set_alias();
-void unset_alias();
+void unset_alias(char* name);
 void executeOtherCommand(char* cmd_name); /* Handles execution of non-builtin commands*/
 
-int is_alias();
-char* get_alias_cmd();
+int is_alias(char* name);
+char* get_alias_cmd(int index);
+int check_infinite_alias(char* alias, char* cmd);
 

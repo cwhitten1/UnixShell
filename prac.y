@@ -81,11 +81,12 @@ line: /* empty */
         }
         |
         default TOKENDEXP{
-                if(is_alias(first_cmd) == 1){
-
-                        first_cmd = NULL;
-                        scan_string(get_alias_cmd(first_cmd));
-
+                int aliasIndex = is_alias(first_cmd);
+                
+                if(aliasIndex != -1){
+                    char* cmd = get_alias_cmd(aliasIndex);
+                    first_cmd = NULL;
+                    scan_string(cmd);
                 }
                 else
                 {
@@ -94,8 +95,8 @@ line: /* empty */
                         YYACCEPT;
                 }
 
-                YYACCEPT; /* I think we may need to comment this out*/
-                }
+                YYACCEPT; /* May need to remove this*/
+        }
         ;
 
 commands: 

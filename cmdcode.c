@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <string.h>
 #include "cmdcode.h"
 #include "alias.h"
 
@@ -70,7 +71,33 @@ void change_dir(char* word){
     free(cwd);       
 }
 
+/********************************
+        ALIAS FUNCTIONS
+*********************************/
+
 void set_alias(char* name, char* word){
+    int i = 0;
+
+
+    //check for alias duplicates
+    if(alias_count > 0){
+        for(i; i < alias_count; ++i){
+            if(strcmp(name, alias_table[i].ali) == 0){
+                printf("\t%s already exists.\n\tPlease use a different name.\n", name);
+                return;
+            }
+        }
+
+        //check if name, word combination creates an infinite recursion
+        int finite = check_infinite_alias(name, word);
+        //infinite recursion detected
+        if(finite == -1){
+            printf("\tInfinite alias detected\n");
+            return;
+        }
+    }
+
+    //insert alias name and command into alias table
     alias_table[alias_count].ali = name;
     alias_table[alias_count].cmd = word;
     alias_count++;
@@ -85,6 +112,7 @@ void show_aliases(){
     else{
         int i = 0;
 
+        //iterate through alias table and print
         while(i != alias_count)
         {
             char* name = alias_table[i].ali;
@@ -101,6 +129,12 @@ void unset_alias(char* name){
     int i = 0;
     bool found = false;
 
+    if(alias_count == 0){
+        printf("\tThere are not aliases\n");
+        return;
+    }
+
+    //find alias with specified name and overwrite with n+1 alias
     while(!found){
         if(strcmp(name, alias_table[i].ali) == 0){
             int c = i; 
@@ -119,19 +153,53 @@ void unset_alias(char* name){
 int is_alias(char* name){
     int i = 0;
 
-    for(i; i <= alias_count-1; ++i){
-        if(strcmp(name, alias_table[i].ali) == 0)
-            return 1;
+    //check if WORD is an actual alias
+    for(i; i < alias_count; ++i){
+        //if match return its index
+        if(strcmp(name, alias_table[i].ali) == 0){
+            return i;
+        }
+            
     }
+    return -1;
 }
 
-char* get_alias_cmd(char* name){
-    int i = 0;
+char* get_alias_cmd(int index){
+    int j = index;
+    char* command;
+    command = strdup(alias_table[j].cmd);
 
-    for(i; i <= alias_count-1; ++i){
-        if(strcmp(name, alias_table[i].ali) == 0)
-            return alias_table[i].cmd;
+    //check if command is also an alias
+    int check = is_alias(command);
+
+    //if not -1 then its still an alias
+    if(check != -1)
+        get_alias_cmd(check);
+    else
+        return command;
+}
+
+int check_infinite_alias(char* alias, char* cmd){
+    int c = 0;
+    int d = 0;
+
+    bool match1 = false;
+    bool match2 = false;
+
+    for(c; c < alias_count; c++){
+        if(strcmp(alias, alias_table[c].cmd) == 0)
+            match1 = true;
+        
+        for(d; d < alias_count; d++){
+            if(strcmp(cmd, alias_table[d].ali) == 0)
+                match2 = true;
+        }
+
+        if(match1 && match2)
+            return -1;
     }
+
+    return 0;
 }
 
 
