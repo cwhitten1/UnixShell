@@ -133,3 +133,14 @@ char* get_alias_cmd(char* name){
             return alias_table[i].cmd;
     }
 }
+
+
+void executeOtherCommand(char* cmd_name){
+    char* exec_path = searchPathForFile(cmd_name);
+    if(exec_path == NULL)
+        printf("\tCould not find \"%s\" on the PATH\n", cmd_name);
+    else
+    {
+        printf("\tFound command %s!", cmd_name);
+    }
+}

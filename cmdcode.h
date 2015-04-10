@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "envar.h"
+#include "path_handle.h"
 
 extern char **environ;
 
@@ -23,6 +24,7 @@ void unset_env(char* env_var, int printOutput);
 void show_aliases();
 void set_alias();
 void unset_alias();
+void executeOtherCommand(char* cmd_name); /* Handles execution of non-builtin commands*/
 
 int is_alias();
 char* get_alias_cmd();

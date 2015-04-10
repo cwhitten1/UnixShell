@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdarg.h>
 #include "command.h"
 #include "envar.h"
 #include "cmdcode.h"
@@ -30,36 +29,6 @@ int yywrap()
 {
         return 1;
 }
-
-void addCommand(char* name, int cmd_id, int argnum, ...)
-{
-        int cmd_ind = cmdtab_curr % MAX_COMMANDS;
-        struct command *cmd = &commands[cmd_ind];
-        cmd->name = name;
-        cmd->cmd_id = cmd_id;
-        cmd->argnum = argnum;
-
-        va_list args;
-        va_start(args, argnum);
-        int i;
-        for(i = 0; i < argnum; i++){
-                cmd->args[i] = va_arg(args, char*);
-        }
-        va_end(args);
-}
-
-void addInputRedirection(int cmd_index, char* in_fn)
-{
-        struct command *cmd = &commands[cmd_index];
-        cmd->infile = in_fn;
-}       
-
-void addOutputRedirection(int cmd_index, char* out_fn, int appendOut)
-{
-        struct command *cmd = &commands[cmd_index];
-        cmd->outfile = strdup(out_fn);
-        cmd->appendOut = appendOut;
-}       
 
 %}
 
@@ -114,16 +83,18 @@ line: /* empty */
         default TOKENDEXP{
                 if(is_alias(first_cmd) == 1){
 
-                    scan_string(get_alias_cmd(first_cmd));
+                        first_cmd = NULL;
+                        scan_string(get_alias_cmd(first_cmd));
+
                 }
                 else
                 {
-                    printf("\tCommand %s not recognized\n", first_cmd);
-                    YYERROR;
+                        //printf("\tCommand %s not recognized\n", first_cmd);
+                        first_cmd = NULL;
+                        YYACCEPT;
                 }
 
-                first_cmd = NULL;
-                YYACCEPT;
+                YYACCEPT; /* I think we may need to comment this out*/
                 }
         ;
 
@@ -338,11 +309,18 @@ io_redir_out_append:
 
 default:
         default WORD
+        {
+                int cmd_ind = cmdtab_curr % MAX_COMMANDS;
+                addArgToCommand(cmd_ind, $2); 
+        }
         |
         WORD
         {
                 if(first_cmd == NULL)
+                {
                         first_cmd = $1;
+                        addCommand($1, OTHER, 0);
+                }
         }
         ;
         
