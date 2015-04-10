@@ -18,6 +18,7 @@ int cmdtab_start = 0;
 int appendOutputRequested = 0;
 
 char* first_cmd;
+char* PIPE = "PIPE";
 
 void yyerror(const char *str)
 {
@@ -129,7 +130,12 @@ line: /* empty */
 commands: 
         command 
         | 
-        commands TOKPIPE {++cmdtab_curr;} command 
+        commands TOKPIPE 
+        {
+                addOutputRedirection(cmdtab_curr, "PIPE", 0);
+                ++cmdtab_curr; 
+                addInputRedirection(cmdtab_curr, "PIPE");
+        } command 
         ;
 
 command:
