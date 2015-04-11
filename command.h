@@ -21,9 +21,13 @@ extern struct command commands[];
 //Table indexes
 extern int cmdtab_curr; /* The current index for parsing a line of commands */
 extern int cmdtab_start; /* The start index for a line of commands */
+extern int cmdtab_end;
+extern int num_commands;
 
-
-void addCommand(char* name, int id, int argnum, ...);
+void addCommand(int ind, char* name, int id, int argnum, ...);
+void insertCommand(int ind, char* name, int id, int argnum, ...);
 void addArgToCommand(int cmd_ind, char* arg);
 void addInputRedirection(int cmd_index, char* in_fn);
 void addOutputRedirection(int cmd_index, char* out_fn, int appendOut);
+void clearCommandTable();
+void clearCommandArgs(struct command* cmd);

@@ -11,9 +11,10 @@
 
 
 //int yydebug=1;
-
 int cmdtab_curr = 0;
 int cmdtab_start = 0;
+int cmdtab_end = 0;
+int num_commands = 0;
 int appendOutputRequested = 0;
 
 char* first_cmd;
@@ -67,36 +68,21 @@ line: /* empty */
         |
         commands TOKENDEXP 
         {      
+                cmdtab_end = cmdtab_curr;
                 YYACCEPT;
         }
         |
         commands io_redir TOKENDEXP 
         {
+                cmdtab_end = cmdtab_curr;
+
                 if(appendOutputRequested)
                         addOutputRedirection(cmdtab_curr, $2, 1);
                 else
                         addOutputRedirection(cmdtab_curr, $2, 0);
 
                 YYACCEPT;
-        }
-        |
-        default TOKENDEXP{
-                int aliasIndex = is_alias(first_cmd);
-                
-                if(aliasIndex != -1){
-                    char* cmd = get_alias_cmd(aliasIndex);
-                    first_cmd = NULL;
-                    scan_string(cmd);
-                }
-                else
-                {
-                        //printf("\tCommand %s not recognized\n", first_cmd);
-                        first_cmd = NULL;
-                        YYACCEPT;
-                }
-
-                YYACCEPT; /* May need to remove this*/
-        }
+        }      
         ;
 
 commands: 
@@ -130,32 +116,37 @@ command:
         bye
         |
         quote
+        |
+        default
+        {
+                first_cmd = NULL;
+        }
         ;
 
 change_dir:
         TOKCD WORD
         {
-                addCommand("CD", CD, 1, $2);
+               insertCommand(cmdtab_curr,"CD", CD, 1, $2);
         }
 
 change_dir_home:
         TOKCD
         {
-                addCommand("CD", CD, 1, HOME);
+               insertCommand(cmdtab_curr,"CD", CD, 1, HOME);
         }
         ;
         
 set_env_var:
         TOKSETENV WORD WORD
         {
-                addCommand("SETENV", SETENV, 2, $2, $3);
+               insertCommand(cmdtab_curr,"SETENV", SETENV, 2, $2, $3);
         }
         ;
 
 unset_env_var:
         TOKCLEARENV WORD
         {
-                addCommand("UNSETENV", UNSETENV, 1, $2);
+               insertCommand(cmdtab_curr,"UNSETENV", UNSETENV, 1, $2);
                 
         }
         ;
@@ -163,7 +154,7 @@ unset_env_var:
 print_env_var:
         TOKPRINTENV
         {
-                addCommand("PRINTENV", PRINTENV, 0);
+               insertCommand(cmdtab_curr,"PRINTENV", PRINTENV, 0);
                 
         }
         ;
@@ -171,7 +162,7 @@ print_env_var:
 show_aliases:
         TOKALIAS
         {
-                addCommand("SHOW_ALIAS", SHOW_ALIAS, 0);
+               insertCommand(cmdtab_curr,"SHOW_ALIAS", SHOW_ALIAS, 0);
                   
         }
         ;
@@ -179,49 +170,49 @@ show_aliases:
 set_alias:
         TOKALIAS WORD WORD
         {
-               addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
+              insertCommand(cmdtab_curr,"SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKCD
         {
-                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
+               insertCommand(cmdtab_curr,"SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKSETENV
         {
-                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
+               insertCommand(cmdtab_curr,"SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKCLEARENV
         {
-                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
+               insertCommand(cmdtab_curr,"SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKPRINTENV
         {
-                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
+               insertCommand(cmdtab_curr,"SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKALIAS
         {
-                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
+               insertCommand(cmdtab_curr,"SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKUNALIAS
         {
-                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
+               insertCommand(cmdtab_curr,"SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         |
         TOKALIAS WORD TOKBYE
         {
-                addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
+               insertCommand(cmdtab_curr,"SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
         ;
@@ -229,7 +220,7 @@ set_alias:
 unset_alias:
         TOKUNALIAS WORD
         {
-                addCommand("UNALIAS", UNSET_ALIAS, 1, $2);
+               insertCommand(cmdtab_curr,"UNALIAS", UNSET_ALIAS, 1, $2);
                 
         }
         ;
@@ -237,7 +228,7 @@ unset_alias:
 bye:
         TOKBYE
         {
-                addCommand("BYE", BYE, 0);    
+               insertCommand(cmdtab_curr,"BYE", BYE, 0);    
         }
 
 quote:
@@ -311,7 +302,7 @@ io_redir_out_append:
 default:
         default WORD
         {
-                int cmd_ind = cmdtab_curr % MAX_COMMANDS;
+                int cmd_ind = cmdtab_curr;
                 addArgToCommand(cmd_ind, $2); 
         }
         |
@@ -320,7 +311,7 @@ default:
                 if(first_cmd == NULL)
                 {
                         first_cmd = $1;
-                        addCommand($1, OTHER, 0);
+                       insertCommand(cmdtab_curr,$1, OTHER, 0);
                 }
         }
         ;
