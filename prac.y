@@ -16,6 +16,7 @@ int cmdtab_start = 0;
 int cmdtab_end = 0;
 int num_commands = 0;
 int appendOutputRequested = 0;
+int inAliasMode = 0;
 
 char* first_cmd;
 char* PIPE = "PIPE";
@@ -68,13 +69,15 @@ line: /* empty */
         |
         commands TOKENDEXP 
         {      
-                cmdtab_end = cmdtab_curr;
+                if(!inAliasMode)
+                        cmdtab_end = cmdtab_curr;
                 YYACCEPT;
         }
         |
         commands io_redir TOKENDEXP 
         {
-                cmdtab_end = cmdtab_curr;
+                if(!inAliasMode)
+                        cmdtab_end = cmdtab_curr;
 
                 if(appendOutputRequested)
                         addOutputRedirection(cmdtab_curr, $2, 1);

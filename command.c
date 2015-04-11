@@ -58,6 +58,8 @@ void removeCommand(int ind)
         {
                 commands[i] = commands[i+1];
         }
+
+        num_commands--;
 }
 
 void addArgToCommand(int cmd_ind, char* arg)

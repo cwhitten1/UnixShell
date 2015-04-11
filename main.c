@@ -44,7 +44,8 @@ void printCommandTable(){
 
 }
 
-void handleAlias(int aliasIndex, int tableIndex){
+//Returns # of rows added to table
+int expandAlias(int aliasIndex, int tableIndex){
 	char* cmd = get_alias_cmd(aliasIndex);
 
 	//Save old state
@@ -56,13 +57,17 @@ void handleAlias(int aliasIndex, int tableIndex){
 	cmdtab_curr = tableIndex;      
     scan_string(cmd);
     int num_added = num_commands - old_num_cmd;
-    cmdtab_end += num_added;
+    
+    return num_added;
 
     
 }
 
 void expandAliases()
 {
+
+	//printf("alias cmd start: %d", cmd_ind);
+	//printf("alias cmd start: %d", cmd_end);
 	int aliasInd;
 	int cmd_ind = cmdtab_start;
 	while(cmd_ind <= cmdtab_end)
@@ -71,8 +76,11 @@ void expandAliases()
 		aliasInd = is_alias(cmd.name);
 		if(aliasInd != -1)
 		{
-			printf("alias cmd ind: %d", cmd_ind);
-			handleAlias(aliasInd, cmd_ind);
+			int old_tab_end = cmdtab_end; //Save old state
+			int numAdded = expandAlias(aliasInd, cmd_ind);
+			cmdtab_end = old_tab_end; //Restore cmdtab pointer
+			cmdtab_end += numAdded; // Extend end pointer to account for new commands alias added
+			cmd_ind += numAdded; //Skip over the new cmds we just added from expanded alias
 		}
 
 		cmd_ind++;
@@ -82,6 +90,7 @@ void expandAliases()
 void handleCommand(){
 
 	expandAliases(); //Expand any aliases in the table so we have either builtins or other commands in the table
+	printCommandTable();
 	int cmd_ind = cmdtab_start;
 	while(cmd_ind <= cmdtab_end)
 	{
@@ -114,7 +123,6 @@ int main()
 	    if(success == 0)
 	    {
 	    	handleCommand();
-	    	printCommandTable();
 	    	resetCommandTable();
 	    }
 	}
