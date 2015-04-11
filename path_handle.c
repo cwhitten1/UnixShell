@@ -1,6 +1,17 @@
 #include "path_handle.h"
 
 char* searchPathForFile(char* fn){
+
+	//If the filename begins with a '/', check just fn and return
+	if(fn[0] == '/')
+	{
+		if(doesFileExist(fn))
+			return fn;
+		else
+			return NULL;
+	}
+
+	//Otherwise we check the full PATH
 	int charInd = 0;
 	char* env_path = strdup(PATH);
 	char* token;
