@@ -1,6 +1,9 @@
 #include "io_redir.h"
 
 void redirect_in(char* fn){
+	if(fn == NULL)
+		return;
+
 	int fd = open(fn, O_RDONLY);
 
 	if(fd == -1)
@@ -15,12 +18,15 @@ void redirect_in(char* fn){
 	close(fd);
 }
 void redirect_out(char* fn, int append){
+	if(fn == NULL)
+		return;
+	
 	int fd;
 
 	if(append)
-		fd = open(fn, O_CREAT|O_WRONLY|O_APPEND);
+		fd = open(fn, O_CREAT | O_WRONLY | O_APPEND,  S_IREAD | S_IWRITE);
 	else
-		fd = open(fn, O_CREAT|O_WRONLY);
+		fd = open(fn, O_CREAT | O_WRONLY,  S_IREAD | S_IWRITE);
 
 	dup2(fd, 1);
 	//close(fd);

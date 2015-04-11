@@ -100,7 +100,7 @@ void expandAliases()
 	}
 }
 
-void handleCommand(){
+void handleCommandLine(){
 
 	//printCommandTable();
 	expandAliases(); //Expand any aliases in the table so we have either builtins or other commands in the table
@@ -135,7 +135,7 @@ int main()
 
 	    if(success == 0)
 	    {
-	    	handleCommand();
+	    	handleCommandLine();
 	    	printCommandTable();
 	    	resetCommandTable();
 	    }
