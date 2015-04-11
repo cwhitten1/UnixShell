@@ -83,6 +83,7 @@ line: /* empty */
                         addOutputRedirection(cmdtab_curr, $2, 1);
                 else
                         addOutputRedirection(cmdtab_curr, $2, 0);
+                appendOutputRequested = 0;
 
                 YYACCEPT;
         }      
