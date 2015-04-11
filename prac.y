@@ -9,6 +9,8 @@
 #include "alias.h"
 #include "io_redir.h"
 
+#define YYERROR_VERBOSE 1
+
 
 //int yydebug=1;
 int cmdtab_curr = 0;
@@ -21,10 +23,12 @@ int inAliasMode = 0;
 char* first_cmd;
 char* PIPE = "PIPE";
 
+
 void yyerror(const char *str)
 {
         flush_buffer();
-        fprintf(stderr,"\terror: %s\n",str);
+        //fprintf(stderr,"\terror: %s\n",str);
+        PrintError(str);
 }
  
 int yywrap()

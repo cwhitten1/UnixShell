@@ -2,6 +2,9 @@
 #include <string.h>
 #include "cmdcode.h"
 #include "alias.h"
+#include "errorMsgs.h"
+
+
 
 struct alias alias_table[MAX_SIZE];
 int alias_count = 0;
@@ -195,13 +198,13 @@ int check_infinite_alias(char* alias, char* cmd){
                 match2 = true;
         }
 
+        //an infinite alias would be created
         if(match1 && match2)
             return -1;
     }
 
     return 0;
 }
-
 
 void executeOtherCommand(char* cmd_name){
     char* exec_path = searchPathForFile(cmd_name);
@@ -210,5 +213,23 @@ void executeOtherCommand(char* cmd_name){
     else
     {
         printf("\tFound command %s!", cmd_name);
+    }
+}
+
+void PrintError(const char* errorString){
+    int i;
+
+    //print standard error message
+    printf("\t%s\n\n",errorString);
+
+    //print defintion of tokens in error message
+    for(i = 0; i < errTable_size; ++i){
+
+        if(strstr(errorString, errTable[i].token) != NULL){
+            printf("\t%s: %s\n", errTable[i].token, errTable[i].msg);
+            printf("\tPossible Commands:\n\t");
+            printf("\t%s\n\n", errTable[i].syntax);
+            break;
+        }
     }
 }
