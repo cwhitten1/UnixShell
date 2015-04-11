@@ -10,7 +10,7 @@ struct command commands[MAX_COMMANDS];
 
 void printShellSymbol()
 {
-        printf(":p > ");
+        printf("(-_-) => ");
 } 
 
 void shell_init(){ 

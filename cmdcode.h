@@ -30,3 +30,4 @@ int is_alias(char* name);
 char* get_alias_cmd(int index);
 int check_infinite_alias(char* alias, char* cmd);
 
+void PrintError(const char *error);
