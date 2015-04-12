@@ -118,6 +118,7 @@ void handleCommandLine(){
     	int cmd_ind = cmdtab_start;
 		while(cmd_ind <= cmdtab_end)
 		{
+			printf("in");
 			int cmd_success;
 			struct command cmd = commands[cmd_ind];
 			switch(cmd.id){
@@ -127,7 +128,7 @@ void handleCommandLine(){
 				case PRINTENV: print_env();break;
 				case SHOW_ALIAS: show_aliases();break;
 				case SET_ALIAS: set_alias(cmd.args[0], cmd.args[1]);break;
-				case UNSET_ALIAS: unset_alias(cmd.args[0]);
+				case UNSET_ALIAS: unset_alias(cmd.args[0]);break;
 				case BYE: printf("\tBye!"); exitRequested = 1;break;
 				case OTHER: 
 
@@ -145,6 +146,7 @@ void handleCommandLine(){
 					else
 					{
 					}
+					break; //Sneaky sneaky break that I forgot
 
 				default: break;
 			}
@@ -160,10 +162,7 @@ void handleCommandLine(){
     {
     	int status; //Used for getting exit status of child process
         wait(&status); //Wait for child process
-        /*if(WEXITSTATUS(status) != 0)
-            return -1;
-        else
-            return 1;*/
+        printf("back");
     }
 
 	
