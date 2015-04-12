@@ -44,9 +44,40 @@ void printCommandTable(){
 
 }
 
+//Returns index of infraction if has broken pipeline, -1 for invalid end value, -2 for no broken pipes
+int cmdTabHasBrokenPipeline(int end)
+{
+	int start = 0;
+	if(end > MAX_COMMANDS -1)
+		return -1;
+	
+	//If first command has in pipe it is invalid
+	if(commands[start].infile != NULL && strcmp(commands[start].infile, "PIPE") == 0)
+		return start;
+
+	//Check rest of commands for broken pipes
+	for(start; start < end; start++)
+	{
+		struct command cmd_curr = commands[start];
+		struct command cmd_next = commands[start+1];
+		int currPipe = strcmp(cmd_curr.outfile, "PIPE");
+		int nextPipe =  strcmp(cmd_next.infile, "PIPE");
+		if((currPipe == 0 && nextPipe != 0) || (currPipe != 0 && nextPipe == 0) )
+			return start;
+	}
+
+	//If last command has out pipe it is invalid 
+	if(commands[end].outfile != NULL && strcmp(commands[end].outfile, "PIPE") == 0)
+		return end;
+	
+	//If table passes previous checks
+	return -2;
+}
+
 //Returns # of rows added to table
 //in_name and out_name are used to manually set the redirection instead of relying on the scan of cmd
 //scanning cmd caused the io redirect paths to be incorrect so this is a bit of a hack.
+//MAYBE CAN REMOVE THE IO STUFF IN HERE
 int expandAlias(int aliasIndex, int tableIndex, char* in_name, char* out_name){
 	char* cmd = get_alias_cmd(aliasIndex);
 
@@ -62,8 +93,12 @@ int expandAlias(int aliasIndex, int tableIndex, char* in_name, char* out_name){
     int num_added = num_commands - old_num_cmd;
 
     //Set the proper io redirection
-    commands[tableIndex].infile = in_name;
-    commands[tableIndex + num_added].outfile = out_name;
+    //Any redirection the alias has will be overwritten if passed in args
+    //are not equal to null
+    if(in_name != NULL)
+		commands[tableIndex].infile = in_name;
+	if(out_name != NULL)
+    	commands[tableIndex + num_added].outfile = out_name;
     
     return num_added;
 
@@ -102,10 +137,23 @@ void expandAliases()
 
 void handleCommandLine(){
 
-	//printCommandTable();
-	expandAliases(); //Expand any aliases in the table so we have either builtins or other commands in the table
+	//Expand any aliases in the table so we have either builtins or other commands in the table
+	expandAliases(); 
 
-	//printCommandTable();
+	//Check for broken pipelines after expansion
+	/*int hasBrokenPipeline = cmdTabHasBrokenPipeline(cmdtab_end); 
+	if(hasBrokenPipeline >= 0)
+	{
+		printf("Detected broken pipeline in command line:\n\tcommand at index %d has I/O redirection already.", hasBrokenPipeline);
+		return;
+	}
+	else if( hasBrokenPipeline == -1)
+	{
+		printf("My bad.\n");
+		return;
+	}*/
+
+	//Handle execution of commands
 	int cmd_ind = cmdtab_start;
 	int flush_signaled = 0;
 	while((cmd_ind <= cmdtab_end) && !flush_signaled)
