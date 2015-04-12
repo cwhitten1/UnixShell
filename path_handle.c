@@ -3,26 +3,10 @@
 char* searchPathForFile(char* fn){
 
 	//If the filename begins with a '/', check just fn and return
-	if(fn[0] == '/')
+	if(fn[0] == '/' || (fn[0] == '.' && fn[1] == '/'))
 	{
 		if(doesFileExist(fn))
 			return fn;
-		else
-			return NULL;
-	}
-	else if(fn[0] == '.' && fn[1] == '/')
-	{
-		//Get rid of '.'
-		char* filename = strdup(fn);
-		filename++;
-
-		//Append current working directory
-		char* pathname = strdup(PWD);
-		strcat(pathname, filename);
-
-		printf("%s\n", pathname);
-		if(doesFileExist(pathname))
-			return pathname;
 		else
 			return NULL;
 	}

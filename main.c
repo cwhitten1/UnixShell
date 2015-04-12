@@ -218,6 +218,8 @@ int main()
 	    resetCommandTable();
 	}
 
+	return 0;
+
 }
 
 
