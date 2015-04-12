@@ -30,6 +30,7 @@ void yyerror(const char *str)
         flush_buffer();
         //fprintf(stderr,"\terror: %s\n",str);
         PrintError(str);
+        resetCommandTable();
 }
  
 int yywrap()

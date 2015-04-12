@@ -151,8 +151,9 @@ int main()
 	    {
 	    	handleCommandLine();
 	    	printCommandTable();
-	    	resetCommandTable();
 	    }
+
+	    resetCommandTable();
 	}
 
 }
