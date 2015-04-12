@@ -3,7 +3,6 @@
 #include "cmdcode.h"
 #include "command.h"
 #include "alias.h"
-#include "errorMsgs.h"
 
 
 
@@ -261,25 +260,5 @@ int executeOtherCommand(int cmd_ind){
                 return 1;
         }
 
-    }
-
-    return -1;
-}
-
-void PrintError(const char* errorString){
-    int i;
-
-    //print standard error message
-    printf("\t%s\n\n",errorString);
-
-    //print defintion of tokens in error message
-    for(i = 0; i < errTable_size; ++i){
-
-        if(strstr(errorString, errTable[i].token) != NULL){
-            printf("\t%s: %s\n", errTable[i].token, errTable[i].msg);
-            printf("\tPossible Commands:\n\t");
-            printf("\t%s\n\n", errTable[i].syntax);
-            break;
-        }
     }
 }
