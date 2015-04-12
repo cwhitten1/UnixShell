@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/types.h>
 #include "envar.h"
 #include "path_handle.h"
 
@@ -24,7 +25,7 @@ void unset_env(char* env_var, int printOutput);
 void show_aliases();
 void set_alias();
 void unset_alias(char* name);
-void executeOtherCommand(char* cmd_name); /* Handles execution of non-builtin commands*/
+int executeOtherCommand(int cmd_ind); /* Handles execution of non-builtin commands*/
 
 int is_alias(char* name);
 char* get_alias_cmd(int index);

@@ -10,7 +10,7 @@ struct command commands[MAX_COMMANDS];
 
 void printShellSymbol()
 {
-        printf("(-_-) => ");
+        printf(":p > ");
 } 
 
 void resetCommandTable(){
@@ -106,8 +106,10 @@ void handleCommandLine(){
 	expandAliases(); //Expand any aliases in the table so we have either builtins or other commands in the table
 	//printCommandTable();
 	int cmd_ind = cmdtab_start;
-	while(cmd_ind <= cmdtab_end)
+	int flush_signaled = 0;
+	while((cmd_ind <= cmdtab_end) && !flush_signaled)
 	{
+		int cmd_success;
 		struct command cmd = commands[cmd_ind];
 		switch(cmd.id){
 			case CD: change_dir(cmd.args[0]); break;
@@ -118,7 +120,18 @@ void handleCommandLine(){
 			case SET_ALIAS: set_alias(cmd.args[0], cmd.args[1]);break;
 			case UNSET_ALIAS: unset_alias(cmd.args[0]);
 			case BYE: printf("\tBye!"); exitRequested = 1;break;
-			case OTHER: executeOtherCommand(cmd.name);
+			case OTHER: 
+				cmd_success = executeOtherCommand(cmd_ind);
+				if( cmd_success == -1)
+				{
+					printf("\tFailed to execute command %s. Command line flushed.\n", cmd.name);
+					flush_signaled = 1;
+				}
+				else if ( cmd_success == 0)
+				{
+					printf("\tCould not find \"%s\" on the PATH\n", cmd.name);
+					flush_signaled = 1;
+				}
 			default: break;
 		}
 		cmd_ind++;
