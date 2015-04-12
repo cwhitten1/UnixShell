@@ -2,7 +2,6 @@
 #include <string.h>
 #include "cmdcode.h"
 #include "alias.h"
-#include "errorMsgs.h"
 
 
 
@@ -213,23 +212,5 @@ void executeOtherCommand(char* cmd_name){
     else
     {
         printf("\tFound command %s!", cmd_name);
-    }
-}
-
-void PrintError(const char* errorString){
-    int i;
-
-    //print standard error message
-    printf("\t%s\n\n",errorString);
-
-    //print defintion of tokens in error message
-    for(i = 0; i < errTable_size; ++i){
-
-        if(strstr(errorString, errTable[i].token) != NULL){
-            printf("\t%s: %s\n", errTable[i].token, errTable[i].msg);
-            printf("\tPossible Commands:\n\t");
-            printf("\t%s\n\n", errTable[i].syntax);
-            break;
-        }
     }
 }

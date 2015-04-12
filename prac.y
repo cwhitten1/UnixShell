@@ -25,8 +25,7 @@ char* PIPE = "PIPE";
 void yyerror(const char *str)
 {
         flush_buffer();
-        //fprintf(stderr,"\terror: %s\n",str);
-        PrintError(str);
+        printf("\t===========================Invalid Syntax==========================\n");
 }
  
 int yywrap()
@@ -111,7 +110,7 @@ commands:
                 addOutputRedirection(cmdtab_curr, "PIPE", 0);
                 ++cmdtab_curr; 
                 addInputRedirection(cmdtab_curr, "PIPE");
-        } command 
+        } command
         ;
 
 command:
@@ -141,6 +140,12 @@ change_dir:
         {
                 addCommand("CD", CD, 1, $2);
         }
+        |
+        TOKCD WORD error
+        {
+            printf("\tCORRECT SYNTAX IS: cd WORD - to go to an existing directory\n");
+        }
+        ;
 
 change_dir_home:
         TOKCD
@@ -154,6 +159,11 @@ set_env_var:
         {
                 addCommand("SETENV", SETENV, 2, $2, $3);
         }
+        |
+        TOKSETENV error
+        {
+            printf("\tCORRECT SYNTAX IS: setenv WORD WORD - to set a environment variable\n");
+        }
         ;
 
 unset_env_var:
@@ -161,6 +171,11 @@ unset_env_var:
         {
                 addCommand("UNSETENV", UNSETENV, 1, $2);
                 
+        }
+        |
+        TOKCLEARENV error
+        {
+            printf("\tCORRECT SYNTAX IS: unsetenv WORD - to remove environment variables\n");
         }
         ;
 
@@ -170,6 +185,11 @@ print_env_var:
                 addCommand("PRINTENV", PRINTENV, 0);
                 
         }
+        |
+        TOKPRINTENV error
+        {
+            printf("\tCORRECT SYNTAX IS: printenv - to print environment variables\n");
+        }
         ;
 
 show_aliases:
@@ -177,6 +197,11 @@ show_aliases:
         {
                 addCommand("SHOW_ALIAS", SHOW_ALIAS, 0);
                   
+        }
+        |
+        TOKALIAS error
+        {
+            printf("\tCORRECT SYNTAX IS: alias - to show list of aliases\n");
         }
         ;
 
@@ -228,6 +253,11 @@ set_alias:
                 addCommand("SET_ALIAS", SET_ALIAS, 2, $2, $3);
                 
         }
+        |
+        TOKALIAS WORD WORD error
+        {
+            printf("\tCORRECT SYNTAX IS: alias WORD WORD (COMMAND) - to set an alias\n");
+        }
         ;
 
 unset_alias:
@@ -236,12 +266,22 @@ unset_alias:
                 addCommand("UNALIAS", UNSET_ALIAS, 1, $2);
                 
         }
+        |
+        TOKUNALIAS WORD error
+        {
+            printf("\tCORRECT SYNTAX IS: unalias WORD - to remove alias\n");
+        }
         ;
 
 bye:
         TOKBYE
         {
                 addCommand("BYE", BYE, 0);    
+        }
+        |
+        TOKBYE error
+        {
+            printf("\tCORRECT SYNTAX IS: bye - to exit shell\n");
         }
 
 quote:
