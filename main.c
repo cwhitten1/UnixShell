@@ -94,8 +94,6 @@ int cmdTabHasInvalidRedirection(int end)
 int expandAlias(int aliasIndex, int tableIndex, char* in_name, char* out_name){
 	char* cmd = get_alias_cmd(aliasIndex);
 
-	printf("In: %s Out %s\n", in_name, out_name);
-
 	//Save old state
 	int old_num_cmd = num_commands;
 	//Remove the alias command (we will be inserting into this location)

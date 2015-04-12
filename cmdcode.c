@@ -183,27 +183,20 @@ char* get_alias_cmd(int index){
 }
 
 int check_infinite_alias(char* alias, char* cmd){
-    int c = 0;
-    int d = 0;
+    int cmd_index = is_alias(cmd); //Does the cmd exist already in the table
 
-    bool match1 = false;
-    bool match2 = false;
+    //If cmd doesn't exist yet, an infinite alias cannot happen
+    if(cmd_index == -1)
+        return 0;
 
-    for(c; c < alias_count; c++){
-        if(strcmp(alias, alias_table[c].cmd) == 0)
-            match1 = true;
-        
-        for(d; d < alias_count; d++){
-            if(strcmp(cmd, alias_table[d].ali) == 0)
-                match2 = true;
-        }
+    char* expanded_cmd = get_alias_cmd(cmd_index);
 
-        //an infinite alias would be created
-        if(match1 && match2)
-            return -1;
-    }
-
-    return 0;
+    //If expanded form of the command is the same as the new alias name, then this would create a circle
+    //leading to an infinite alias
+    if(strcmp(alias, expanded_cmd) == 0)
+        return -1;
+    else
+        return 0;
 }
 
 //Returns 1 if command was executed successfully, 0 if cmd wasn't found, -1 otherwise
