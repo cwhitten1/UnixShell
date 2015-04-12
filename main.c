@@ -44,16 +44,18 @@ void printCommandTable(){
 
 }
 
-//Returns index of infraction if has broken pipeline, -1 for invalid end value, -2 for no broken pipes
-int cmdTabHasBrokenPipeline(int end)
+//Returns index of infraction if has bad redirection, -1 for invalid end value, -2 for no bad redirection
+int cmdTabHasInvalidRedirection(int end)
 {
 	int start = 0;
 	if(end > MAX_COMMANDS -1)
 		return -1;
 	
-	//If first command has in pipe it is invalid
+	//If first command has in pipe, set it to null because that is not allowed
+	//This is a bit of a hack to combat the weird bug where 
+	//Initial command has in pipe after alias expansion
 	if(commands[start].infile != NULL && strcmp(commands[start].infile, "PIPE") == 0)
-		return start;
+		commands[start].infile = NULL;
 
 	//Check rest of commands for broken pipes
 	for(start; start < end; start++)
@@ -62,8 +64,19 @@ int cmdTabHasBrokenPipeline(int end)
 		struct command cmd_next = commands[start+1];
 		int currPipe = strcmp(cmd_curr.outfile, "PIPE");
 		int nextPipe =  strcmp(cmd_next.infile, "PIPE");
+
+		//If current command has input redirection and is builtin, redirection is invalid
+		if(cmd_curr.id != OTHER && cmd_curr.infile != NULL)
+			return start;
+
+		//If in/out pipes don't match, pipeline is broken
 		if((currPipe == 0 && nextPipe != 0) || (currPipe != 0 && nextPipe == 0) )
 			return start;
+
+		//If next command has in pipe and is builtin, pipeline is broken
+		if(cmd_next.id != OTHER && nextPipe == 0)
+			return start+1;
+
 	}
 
 	//If last command has out pipe it is invalid 
@@ -81,9 +94,10 @@ int cmdTabHasBrokenPipeline(int end)
 int expandAlias(int aliasIndex, int tableIndex, char* in_name, char* out_name){
 	char* cmd = get_alias_cmd(aliasIndex);
 
+	printf("In: %s Out %s\n", in_name, out_name);
+
 	//Save old state
 	int old_num_cmd = num_commands;
-
 	//Remove the alias command (we will be inserting into this location)
 	removeCommand(tableIndex);
 
@@ -96,10 +110,10 @@ int expandAlias(int aliasIndex, int tableIndex, char* in_name, char* out_name){
     //Any redirection the alias has will be overwritten if passed in args
     //are not equal to null
     if(in_name != NULL)
-		commands[tableIndex].infile = in_name;
+		commands[tableIndex].infile = strdup(in_name);
 	if(out_name != NULL)
-    	commands[tableIndex + num_added].outfile = out_name;
-    
+    	commands[tableIndex + num_added].outfile = strdup(out_name);
+
     return num_added;
 
     
@@ -141,17 +155,17 @@ void handleCommandLine(){
 	expandAliases(); 
 
 	//Check for broken pipelines after expansion
-	/*int hasBrokenPipeline = cmdTabHasBrokenPipeline(cmdtab_end); 
+	int hasBrokenPipeline = cmdTabHasInvalidRedirection(cmdtab_end); 
 	if(hasBrokenPipeline >= 0)
 	{
-		printf("Detected broken pipeline in command line:\n\tcommand at index %d has I/O redirection already.", hasBrokenPipeline);
+		printf("\nDetected broken pipeline:\nCommand at index %d has I/O redirection already or is a built-in command.", hasBrokenPipeline);
 		return;
 	}
 	else if( hasBrokenPipeline == -1)
 	{
 		printf("My bad.\n");
 		return;
-	}*/
+	}
 
 	//Handle execution of commands
 	int cmd_ind = cmdtab_start;
@@ -167,7 +181,7 @@ void handleCommandLine(){
 			case PRINTENV: print_env();break;
 			case SHOW_ALIAS: show_aliases();break;
 			case SET_ALIAS: set_alias(cmd.args[0], cmd.args[1]);break;
-			case UNSET_ALIAS: unset_alias(cmd.args[0]);
+			case UNSET_ALIAS: unset_alias(cmd.args[0]);break;
 			case BYE: printf("\tBye!"); exitRequested = 1;break;
 			case OTHER: 
 				cmd_success = executeOtherCommand(cmd_ind);
