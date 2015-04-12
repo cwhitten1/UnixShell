@@ -41,7 +41,7 @@ char* searchPathForFile(char* fn){
 
 int doesFileExist(char* pathname){
 	struct stat s;
-	printf("Checking path: %s\n", pathname);
+	//printf("Checking path: %s\n", pathname);
 	if(stat(pathname, &s) == 0 && S_ISREG(s.st_mode))
 		return 1;
 	else

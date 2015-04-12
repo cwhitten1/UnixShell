@@ -207,7 +207,7 @@ int check_infinite_alias(char* alias, char* cmd){
     return 0;
 }
 
-//Returns 1 if command was executed successfully, 0 if cmd wasn't found, -1 otherwise
+//Returns 1 if command was executed successfully, 0 if cmd wasnt found, -1 otherwise
 int executeOtherCommand(int cmd_ind){
     struct command cmd = commands[cmd_ind];
     char* cmd_name = cmd.name;
@@ -216,34 +216,11 @@ int executeOtherCommand(int cmd_ind){
         return 0;
     else
     {
-        int status; //Used for getting exit status of child process
         //printf("\tFound command %s!", cmd_name);
-        pid_t pid = fork();
 
-        //If forking failed
-        if(pid == -1)
-        {
-            printf("\tFailed to fork new process\n");
-            return -1;
-        }
-        //If child process is executing this
-        else if(pid == 0)
-        {
-            int success = execv(exec_path, cmd.args);
-            if(success == -1)
-                exit(1);
-            exit(0);
-        }
-        //Otherwise parent process is executing
-        else
-        {
-            wait(&status); //Wait for child process
-            if(WEXITSTATUS(status) != 0)
-                return -1;
-            else
-                return 1;
-        }
-
+        int success = execv(exec_path, cmd.args);
+        if(success != -1)
+            return 1;
     }
 
     return -1;
