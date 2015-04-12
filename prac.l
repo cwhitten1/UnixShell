@@ -58,7 +58,20 @@ void scan_string(char* str){
 	new_str = strdup(str);
 	strcat(new_str, "\n");
 	
-	yy_scan_string(new_str);
+	/*FILE *f = fopen("file.txt", "w+");
+	if (f == NULL)
+	{
+	    printf("Error scanning alias!\n");
+	    return;
+	}
+
+	fprintf(f, "%s", new_str);*/
+
+	YY_BUFFER_STATE old = YY_CURRENT_BUFFER;
+	YY_BUFFER_STATE buf = yy_scan_string(new_str);
 	yyparse();
+	yy_flush_buffer(buf);
 	yylex_destroy();
+	yy_switch_to_buffer(old);
+	//fclose(f);
 }

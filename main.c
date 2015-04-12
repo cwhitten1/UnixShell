@@ -155,7 +155,7 @@ void handleCommandLine(){
 	int hasBrokenPipeline = cmdTabHasInvalidRedirection(cmdtab_end); 
 	if(hasBrokenPipeline >= 0)
 	{
-		printf("\nDetected broken pipeline:\nCommand at index %d has I/O redirection already or is a built-in command.", hasBrokenPipeline);
+		printf("\nDetected broken pipeline:\nCommand at index %d has I/O redirection already or is a built-in command.\n", hasBrokenPipeline);
 		return;
 	}
 	else if( hasBrokenPipeline == -1)
@@ -209,7 +209,7 @@ int main()
 	    if(success == 0)
 	    {
 	    	handleCommandLine();
-	    	//printCommandTable();
+	    	printCommandTable();
 	    }
 
 	    resetCommandTable();
