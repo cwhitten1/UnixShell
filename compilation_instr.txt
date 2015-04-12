@@ -1,7 +1,0 @@
-How to compile:
-
-Make sure you have installed flex and bison in Cygwin
-
-make clean; 
-make;
-./run.exe
