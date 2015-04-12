@@ -18,6 +18,7 @@ int cmdtab_start = 0;
 int cmdtab_end = 0;
 int num_commands = 0;
 int appendOutputRequested = 0;
+int outputRedirRequested = 0;
 int inAliasMode = 0;
 
 char* first_cmd;
@@ -83,10 +84,18 @@ line: /* empty */
                 if(!inAliasMode)
                         cmdtab_end = cmdtab_curr;
 
-                if(appendOutputRequested)
-                        addOutputRedirection(cmdtab_curr, $2, 1);
-                else
-                        addOutputRedirection(cmdtab_curr, $2, 0);
+                //Handle output redir
+                if(outputRedirRequested)
+                {
+                        if(appendOutputRequested)
+                                addOutputRedirection(cmdtab_curr, $2, 1);
+                        else
+                                addOutputRedirection(cmdtab_curr, $2, 0);
+                }
+
+
+                //Reset globals
+                outputRedirRequested = 0;
                 appendOutputRequested = 0;
 
                 YYACCEPT;
@@ -136,6 +145,7 @@ change_dir:
         {
                insertCommand(cmdtab_curr,"CD", CD, 1, $2);
         }
+        ;
 
 change_dir_home:
         TOKCD
@@ -297,13 +307,16 @@ io_redir_out:
         TOK_IO_REDIR_OUT WORD
         {
                $$ = $2;
+               outputRedirRequested = 1;
+               appendOutputRequested = 0;
         }
 
 io_redir_out_append:
         TOK_IO_REDIR_OUT_APPEND WORD
         {
-                appendOutputRequested = 1;
-                $$ = $2;
+               $$ = $2;
+               outputRedirRequested = 1;
+               appendOutputRequested = 1;
         }
         ;
 

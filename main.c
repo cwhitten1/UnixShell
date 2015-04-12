@@ -37,7 +37,7 @@ void printCommandTable(){
 	for(i=0;i<MAX_COMMANDS;i++)
 	{
 			struct command cmd = commands[i];
-			printf("%d: %s | %d | %d | %s | %s\n", i, cmd.name, cmd.id, cmd.argnum, cmd.infile, cmd.outfile);
+			printf("%d: %s | %d | %d | %s | %s | %d\n", i, cmd.name, cmd.id, cmd.argnum, cmd.infile, cmd.outfile, cmd.appendOut);
 
 	}
 	printf("\n\n");

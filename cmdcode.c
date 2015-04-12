@@ -229,6 +229,22 @@ int executeOtherCommand(int cmd_ind){
         //If child process is executing this
         else if(pid == 0)
         {
+            //Setup redirection
+            if(cmd.infile != NULL && strcmp(cmd.infile, "PIPE") != 0)
+            {
+                int redir_success = redirect_in(cmd.infile);
+                if(redir_success != 0)
+                    printf("\tFile %s not readable or does not exist.\n", cmd.infile);
+            }
+                
+            if(cmd.outfile != NULL && strcmp(cmd.outfile, "PIPE") != 0)
+            {
+                int redir_success = redirect_out(cmd.outfile, cmd.appendOut);
+                if(redir_success != 0)
+                    printf("\tFailed to write to file %s.\n", cmd.outfile);
+            }
+
+            //Execute command
             int success = execv(exec_path, cmd.args);
             if(success == -1)
                 exit(1);
@@ -237,6 +253,7 @@ int executeOtherCommand(int cmd_ind){
         //Otherwise parent process is executing
         else
         {
+            printf("\tExecuting...\n");
             wait(&status); //Wait for child process
             if(WEXITSTATUS(status) != 0)
                 return -1;
