@@ -90,7 +90,6 @@ int cmdTabHasInvalidRedirection(int end)
 //Returns # of rows added to table
 //in_name and out_name are used to manually set the redirection instead of relying on the scan of cmd
 //scanning cmd caused the io redirect paths to be incorrect so this is a bit of a hack.
-//MAYBE CAN REMOVE THE IO STUFF IN HERE
 int expandAlias(int aliasIndex, int tableIndex, char* in_name, char* out_name){
 	char* cmd = get_alias_cmd(aliasIndex);
 
@@ -210,7 +209,7 @@ int main()
 	    if(success == 0)
 	    {
 	    	handleCommandLine();
-	    	printCommandTable();
+	    	//printCommandTable();
 	    }
 
 	    resetCommandTable();

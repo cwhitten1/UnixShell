@@ -27,7 +27,7 @@ char* PIPE = "PIPE";
 
 void yyerror(const char *str)
 {
-        flush_buffer();
+        //flush_buffer();
         printf("\tinvalid syntax\n");
 }
  
@@ -145,7 +145,7 @@ change_dir:
                insertCommand(cmdtab_curr,"CD", CD, 1, $2);
         }
         |
-        TOKCD WORD error
+        TOKCD WORD error TOKENDEXP
         {
             printf("\tUse: cd WORD - to go to an existing directory\n");
             YYABORT;
@@ -164,14 +164,14 @@ set_env_var:
         {
                insertCommand(cmdtab_curr,"SETENV", SETENV, 2, $2, $3);
         }
-        |
-        TOKSETENV error
+        | 
+        TOKSETENV error TOKENDEXP
         {
             printf("\tUse: setenv WORD WORD - to set a environment variable\n");
             YYABORT;
         }
         |
-        TOKSETENV WORD WORD error
+        TOKSETENV WORD WORD error TOKENDEXP
         {
             printf("\tUse: setenv WORD WORD - to set a environment variable\n");
             YYABORT;
@@ -185,13 +185,13 @@ unset_env_var:
                 
         }
         |
-        TOKCLEARENV error
+        TOKCLEARENV error TOKENDEXP
         {
             printf("\tUse: unsetenv WORD - to remove environment variables\n");
             YYABORT;
         }
         |
-        TOKCLEARENV WORD error
+        TOKCLEARENV WORD error TOKENDEXP
         {
             printf("\tUse: unsetenv WORD - to remove environment variables\n");
             YYABORT;
@@ -205,7 +205,7 @@ print_env_var:
                 
         }
         |
-        TOKPRINTENV error
+        TOKPRINTENV error TOKENDEXP
         {
             printf("\tUse: printenv - to print environment variables\n");
             YYABORT;
@@ -269,13 +269,13 @@ set_alias:
                 
         }
         |
-        TOKALIAS WORD WORD error
+        TOKALIAS WORD WORD error TOKENDEXP
         {
             printf("\tUse: alias WORD WORD - to set an alias\n");
             YYABORT;
         }
         |
-        TOKALIAS WORD error
+        TOKALIAS WORD error TOKENDEXP
         {
             printf("\tUse: alias WORD WORD - to set an alias\n");
             YYABORT;
@@ -289,14 +289,14 @@ unset_alias:
                 
         }
         |
-        TOKUNALIAS WORD error
+        TOKUNALIAS WORD error TOKENDEXP
         {
             printf("\tUse: unalias WORD - to remove alias\n");
             YYABORT;
 
         }
         |
-        TOKUNALIAS error
+        TOKUNALIAS error TOKENDEXP
         {
             printf("\tUse: unalias WORD - to remove alias\n");
             YYABORT;
@@ -310,7 +310,7 @@ bye:
                insertCommand(cmdtab_curr,"BYE", BYE, 0);    
         }
         |
-        TOKBYE error
+        TOKBYE error TOKENDEXP
         {
             printf("\tUse: bye - to exit shell\n");
             YYABORT;
