@@ -102,70 +102,41 @@ void expandAliases()
 
 void handleCommandLine(){
 
+	//printCommandTable();
 	expandAliases(); //Expand any aliases in the table so we have either builtins or other commands in the table
 
-	//Fork a new process
-	pid_t pid = fork();
-
-	//If forking failed
-    if(pid == -1)
-    {
-        printf("\tFailed to fork new process to execute command.\n");
-    }
-    //If child process is executing
-    else if(pid == 0)
-    {
-    	int cmd_ind = cmdtab_start;
-		while(cmd_ind <= cmdtab_end)
-		{
-			printf("in");
-			int cmd_success;
-			struct command cmd = commands[cmd_ind];
-			switch(cmd.id){
-				case CD: change_dir(cmd.args[0]); break;
-				case SETENV: set_env(cmd.args[0], cmd.args[1], 1);break;
-				case UNSETENV: unset_env(cmd.args[0], 1);break;
-				case PRINTENV: print_env();break;
-				case SHOW_ALIAS: show_aliases();break;
-				case SET_ALIAS: set_alias(cmd.args[0], cmd.args[1]);break;
-				case UNSET_ALIAS: unset_alias(cmd.args[0]);break;
-				case BYE: printf("\tBye!"); exitRequested = 1;break;
-				case OTHER: 
-
-					cmd_success = executeOtherCommand(cmd_ind);
-					if( cmd_success == -1)
-					{
-						printf("\tFailed to execute command %s. Command line flushed.\n", cmd.name);
-						exit(-1); // We don't want to keep executing commands if one of them fails
-					}
-					else if ( cmd_success == 0)
-					{
-						printf("\tCould not find \"%s\" on the PATH\n", cmd.name);
-						exit(-1); // We don't want to keep executing commands if one of them fails
-					}
-					else
-					{
-					}
-					break; //Sneaky sneaky break that I forgot
-
-				default: break;
-			}
-			cmd_ind++;
+	//printCommandTable();
+	int cmd_ind = cmdtab_start;
+	int flush_signaled = 0;
+	while((cmd_ind <= cmdtab_end) && !flush_signaled)
+	{
+		int cmd_success;
+		struct command cmd = commands[cmd_ind];
+		switch(cmd.id){
+			case CD: change_dir(cmd.args[0]); break;
+			case SETENV: set_env(cmd.args[0], cmd.args[1], 1);break;
+			case UNSETENV: unset_env(cmd.args[0], 1);break;
+			case PRINTENV: print_env();break;
+			case SHOW_ALIAS: show_aliases();break;
+			case SET_ALIAS: set_alias(cmd.args[0], cmd.args[1]);break;
+			case UNSET_ALIAS: unset_alias(cmd.args[0]);
+			case BYE: printf("\tBye!"); exitRequested = 1;break;
+			case OTHER: 
+				cmd_success = executeOtherCommand(cmd_ind);
+				if( cmd_success == -1)
+				{
+					printf("\tFailed to execute command %s. Command line flushed.\n", cmd.name);
+					flush_signaled = 1;
+				}
+				else if ( cmd_success == 0)
+				{
+					printf("\tCould not find \"%s\" on the PATH\n", cmd.name);
+					flush_signaled = 1;
+				}
+			default: break;
 		}
-
-		//Exit the child process with success
-		exit(0);
-    }
-
-    //Otherwise parent process is executing
-    else
-    {
-    	int status; //Used for getting exit status of child process
-        wait(&status); //Wait for child process
-        printf("back");
-    }
-
-	
+		cmd_ind++;
+	}
 }
 
 int main()
