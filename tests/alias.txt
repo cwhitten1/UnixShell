@@ -1,0 +1,8 @@
+alias a b
+alias b c
+alias c "cd star"
+alias
+a
+b
+c
+bye

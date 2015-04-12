@@ -1,0 +1,4 @@
+ls
+make
+wc < a.txt
+bye

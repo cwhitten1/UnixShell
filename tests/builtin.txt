@@ -1,0 +1,11 @@
+cd star
+cd .
+cd UnixShell
+cd cdtest
+cd dfa daf
+
+printenv
+unsetenv INFOPATH
+setenv INFOPATH toast
+printenv
+bye
